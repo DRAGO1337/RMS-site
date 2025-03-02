@@ -18,48 +18,63 @@ initDb();
 // Authentication endpoints
 server.post('/api/register', async (req, res) => {
   try {
+    console.log('Registration request received:', req.body);
     const { name, email, password, phone, address } = req.body;
     
     // Validate input
     if (!name || !email || !password) {
+      console.log('Missing required fields:', { name: !!name, email: !!email, password: !!password });
       return res.status(400).json({ message: 'Please provide name, email, and password' });
     }
     
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      console.log('Invalid email format:', email);
       return res.status(400).json({ message: 'Please provide a valid email address' });
     }
     
     // Check if user already exists
-    const existingUser = await pool.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email]
-    );
-    
-    if (existingUser.rows.length > 0) {
-      return res.status(400).json({ message: 'User with this email already exists' });
+    try {
+      const existingUser = await pool.query(
+        'SELECT * FROM users WHERE email = $1',
+        [email]
+      );
+      
+      console.log('Existing user check result:', { count: existingUser.rows.length });
+      
+      if (existingUser.rows.length > 0) {
+        return res.status(400).json({ message: 'User with this email already exists' });
+      }
+    } catch (dbErr) {
+      console.error('Error checking for existing user:', dbErr);
+      throw dbErr;
     }
     
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    console.log('Attempting to create user:', { name, email, phone, address });
+    console.log('Attempting to create user:', { name, email, hasPhone: !!phone, hasAddress: !!address });
     
     // Insert user
-    const newUser = await pool.query(
-      'INSERT INTO users (name, email, password, phone, address) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, phone, address',
-      [name, email, hashedPassword, phone || null, address || null]
-    );
-    
-    console.log('User created successfully:', newUser.rows[0]);
-    
-    // Return user info (without password)
-    res.status(201).json({
-      user: newUser.rows[0],
-      message: 'Registration successful'
-    });
+    try {
+      const newUser = await pool.query(
+        'INSERT INTO users (name, email, password, phone, address) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, phone, address',
+        [name, email, hashedPassword, phone || null, address || null]
+      );
+      
+      console.log('User created successfully:', newUser.rows[0]);
+      
+      // Return user info (without password)
+      res.status(201).json({
+        user: newUser.rows[0],
+        message: 'Registration successful'
+      });
+    } catch (insertErr) {
+      console.error('Error inserting new user:', insertErr);
+      throw insertErr;
+    }
   } catch (err) {
     console.error('Registration error:', err);
     
@@ -72,7 +87,11 @@ server.post('/api/register', async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
     
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    if (err.code === '42P01') {
+      return res.status(500).json({ message: 'Database table does not exist. Please ensure the users table is created.' });
+    }
+    
+    res.status(500).json({ message: `Server error: ${err.message}. Please try again later.` });
   }
 });
 

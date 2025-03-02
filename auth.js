@@ -106,6 +106,8 @@ function setupAuthListeners() {
     signupForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
+      console.log("Signup form submitted");
+      
       const name = document.getElementById('signup-name').value;
       const email = document.getElementById('signup-email').value;
       const password = document.getElementById('signup-password').value;
@@ -136,6 +138,8 @@ function setupAuthListeners() {
         // Show loading indicator
         showNotification('Регистрация...', 'info');
         
+        console.log('Sending registration data:', { name, email, password, phone, address });
+        
         // Call register API
         const response = await fetch('/api/register', {
           method: 'POST',
@@ -143,7 +147,10 @@ function setupAuthListeners() {
           body: JSON.stringify({ name, email, password, phone, address })
         });
         
+        console.log('Registration response status:', response.status);
+        
         const data = await response.json();
+        console.log('Registration response data:', data);
         
         if (!response.ok) {
           throw new Error(data.message || 'Грешка при регистрация');
