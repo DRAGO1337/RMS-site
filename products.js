@@ -3,8 +3,186 @@
 document.addEventListener('DOMContentLoaded', function() {
   loadProducts();
   setupFilterListeners();
+  setupSearch();
   initCart();
 });
+
+// Setup search functionality
+function setupSearch() {
+  const searchInput = document.getElementById('product-search');
+  const searchBtn = document.getElementById('search-btn');
+  
+  // Search when button is clicked
+  searchBtn.addEventListener('click', performSearch);
+  
+  // Search when Enter key is pressed
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      performSearch();
+    }
+  });
+  
+  function performSearch() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    
+    if (searchTerm === '') {
+      renderProducts(); // Reset to show all products
+      return;
+    }
+    
+    // Filter products based on search term
+    const searchResults = products.filter(product => {
+      return (
+        product.name.toLowerCase().includes(searchTerm) || 
+        product.description.toLowerCase().includes(searchTerm) ||
+        product.category.toLowerCase().includes(searchTerm)
+      );
+    });
+    
+    // Render search results
+    renderSearchResults(searchResults, searchTerm);
+  }
+  
+  function renderSearchResults(results, searchTerm) {
+    const productsGrid = document.getElementById('products-grid');
+    productsGrid.innerHTML = '';
+    
+    if (results.length === 0) {
+      productsGrid.innerHTML = `<p class="no-products">Няма продукти, съответстващи на търсенето "${searchTerm}".</p>`;
+      return;
+    }
+    
+    // Display search results count
+    productsGrid.innerHTML = `<p class="search-results-count">${results.length} продукта, съответстващи на търсенето "${searchTerm}"</p>`;
+    
+    // Render each product in search results
+    results.forEach(product => {
+      const productCard = document.createElement('div');
+      productCard.classList.add('product-card');
+      productCard.setAttribute('data-category', product.category);
+      if (product.subtype) {
+        productCard.setAttribute('data-subtype', product.subtype);
+      }
+
+      productCard.innerHTML = `
+        <div class="product-image">
+          <img src="${product.image}" alt="${product.name}">
+        </div>
+        <div class="product-info">
+          <h3>${product.name}</h3>
+          <p class="price">${product.price.toFixed(2)} лв.</p>
+          <p class="description">${product.description}</p>
+          <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">Добави в Кошницата</button>
+        </div>
+      `;
+
+      productsGrid.appendChild(productCard);
+    });
+    
+    // Re-add event listeners to newly created add-to-cart buttons
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', function() {
+        addToCart(
+          this.getAttribute('data-id'),
+          this.getAttribute('data-name'),
+          parseFloat(this.getAttribute('data-price'))
+        );
+      });
+    });
+  }
+}
+</old_str>
+<new_str>document.addEventListener('DOMContentLoaded', function() {
+  loadProducts();
+  setupFilterListeners();
+  setupSearch();
+  initCart();
+});
+
+// Setup search functionality
+function setupSearch() {
+  const searchInput = document.getElementById('product-search');
+  const searchBtn = document.getElementById('search-btn');
+  
+  // Search when button is clicked
+  searchBtn.addEventListener('click', performSearch);
+  
+  // Search when Enter key is pressed
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      performSearch();
+    }
+  });
+  
+  function performSearch() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    
+    if (searchTerm === '') {
+      renderProducts(); // Reset to show all products
+      return;
+    }
+    
+    // Filter products based on search term
+    const searchResults = products.filter(product => {
+      return (
+        product.name.toLowerCase().includes(searchTerm) || 
+        product.description.toLowerCase().includes(searchTerm) ||
+        product.category.toLowerCase().includes(searchTerm)
+      );
+    });
+    
+    // Render search results
+    renderSearchResults(searchResults, searchTerm);
+  }
+  
+  function renderSearchResults(results, searchTerm) {
+    const productsGrid = document.getElementById('products-grid');
+    productsGrid.innerHTML = '';
+    
+    if (results.length === 0) {
+      productsGrid.innerHTML = `<p class="no-products">Няма продукти, съответстващи на търсенето "${searchTerm}".</p>`;
+      return;
+    }
+    
+    // Display search results count
+    productsGrid.innerHTML = `<p class="search-results-count">${results.length} продукта, съответстващи на търсенето "${searchTerm}"</p>`;
+    
+    // Render each product in search results
+    results.forEach(product => {
+      const productCard = document.createElement('div');
+      productCard.classList.add('product-card');
+      productCard.setAttribute('data-category', product.category);
+      if (product.subtype) {
+        productCard.setAttribute('data-subtype', product.subtype);
+      }
+
+      productCard.innerHTML = `
+        <div class="product-image">
+          <img src="${product.image}" alt="${product.name}">
+        </div>
+        <div class="product-info">
+          <h3>${product.name}</h3>
+          <p class="price">${product.price.toFixed(2)} лв.</p>
+          <p class="description">${product.description}</p>
+          <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">Добави в Кошницата</button>
+        </div>
+      `;
+
+      productsGrid.appendChild(productCard);
+    });
+    
+    // Re-add event listeners to newly created add-to-cart buttons
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', function() {
+        addToCart(
+          this.getAttribute('data-id'),
+          this.getAttribute('data-name'),
+          parseFloat(this.getAttribute('data-price'))
+        );
+      });
+    });
+  }
+}
 
 // Initialize cart
 function initCart() {

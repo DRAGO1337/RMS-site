@@ -1,4 +1,3 @@
-
 /* Products Page Specific Styles */
 .product-page {
   padding: 5rem 0;
@@ -88,6 +87,70 @@
   gap: 2rem;
 }
 
+.products-header {
+  padding: 3rem 0 1rem;
+  background-color: white;
+}
+
+.search-container {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.search-btn:hover {
+  background-color: var(--secondary-color);
+}
+
+.filters {
+  /* Filter content will go here */
+}
+
+.no-products {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: var(--gray-color);
+}
+
+.search-results-count {
+  grid-column: 1 / -1;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border-radius: var(--border-radius);
+  color: var(--dark-color);
+  font-size: 0.9rem;
+}
+
 .prebuilt-filters {
   display: none;
 }
@@ -97,7 +160,7 @@
   .products-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .filter-sidebar {
     margin-bottom: 2rem;
   }
@@ -107,11 +170,11 @@
   .filter-sidebar {
     padding: 1rem;
   }
-  
+
   .products-grid {
     gap: 1.5rem;
   }
-  
+
   .product-card {
     max-width: 100%;
   }
@@ -121,24 +184,24 @@
   .products-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .filter-section h3 {
     font-size: 1rem;
   }
-  
+
   .filter-btn, .sub-filter-btn, .sort-btn {
     font-size: 0.9rem;
     padding: 0.4rem;
   }
-  
+
   .product-info h3 {
     font-size: 1.2rem;
   }
-  
+
   .products-container {
     padding: 0 0.5rem;
   }
-  
+
   .product-page {
     padding: 3rem 0;
   }
@@ -148,7 +211,7 @@
   .product-image {
     height: 180px;
   }
-  
+
   .price-range {
     margin: 0;
   }
