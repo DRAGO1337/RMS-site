@@ -217,6 +217,124 @@ function setupSearch() {
   initCart();
 });
 
+// Sample product data
+let products = [
+  {
+    id: '1',
+    name: 'Titan X Геймърски ПК',
+    price: 1999.99,
+    description: 'Върховно геймърско изживяване с RTX 4080, i9 процесор и 32GB RAM.',
+    image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'prebuilt',
+    subtype: 'heavy-gaming'
+  },
+  {
+    id: '2',
+    name: 'Професионална Работна Станция',
+    price: 2499.99,
+    description: 'Проектирана за професионалисти с Xeon процесор, NVIDIA Quadro и 64GB ECC RAM.',
+    image: 'https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'prebuilt',
+    subtype: 'workstation'
+  },
+  {
+    id: '3',
+    name: 'Начален Геймърски Компютър',
+    price: 899.99,
+    description: 'Перфектен начален геймърски компютър с RTX 3060, Ryzen 5 и 16GB RAM.',
+    image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'prebuilt',
+    subtype: 'light-gaming'
+  },
+  {
+    id: '4',
+    name: 'Компактна Мощност',
+    price: 1299.99,
+    description: 'Малък размер, но голяма производителност.',
+    image: 'https://images.unsplash.com/photo-1587202372616-b43abea06c2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'prebuilt',
+    subtype: 'light-gaming'
+  },
+  {
+    id: '5',
+    name: 'RTX 4080 Видео Карта',
+    price: 799.99,
+    description: 'Ново поколение графика с възможности за ray tracing.',
+    image: 'https://images.unsplash.com/photo-1591405351990-4726e331f141?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'components',
+    subtype: null
+  },
+  {
+    id: '6',
+    name: 'Механична RGB Клавиатура',
+    price: 129.99,
+    description: 'Премиум механични ключове с персонализируемо RGB осветление.',
+    image: 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'peripherals',
+    subtype: null
+  },
+  {
+    id: '7',
+    name: 'Гейминг Слушалки Pro',
+    price: 89.99,
+    description: 'Immersive 7.1 съраунд звук с шумопотискащ микрофон.',
+    image: 'https://images.unsplash.com/photo-1612444530582-fc66183b16f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'peripherals',
+    subtype: null
+  },
+  {
+    id: '8',
+    name: 'Гейминг Мишка RGB',
+    price: 59.99,
+    description: '16000 DPI оптичен сензор с програмируеми бутони.',
+    image: 'https://images.unsplash.com/photo-1605773527852-c546a8584ea3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'peripherals',
+    subtype: null
+  },
+  {
+    id: '9',
+    name: 'Процесор Intel i9-13900K',
+    price: 549.99,
+    description: 'Върхова производителност за гейминг и креативни задачи.',
+    image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'components',
+    subtype: null
+  },
+  {
+    id: '10',
+    name: 'AMD Ryzen 9 7950X',
+    price: 599.99,
+    description: 'Мултикор мощ за всякакви задачи и сценарии.',
+    image: 'https://images.unsplash.com/photo-1555618254-5fa7b7e4a2c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'components',
+    subtype: null
+  },
+  {
+    id: '11',
+    name: 'Супер Гейм Стрийм ПК',
+    price: 2799.99,
+    description: 'Перфектен за стриймъри и гейминг ентусиасти.',
+    image: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'prebuilt',
+    subtype: 'heavy-gaming'
+  },
+  {
+    id: '12',
+    name: 'Базова Работна Станция',
+    price: 1799.99,
+    description: 'Идеална за офис задачи и лека работа.',
+    image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    category: 'prebuilt',
+    subtype: 'workstation'
+  }
+];
+
+// Current filter and sort state
+let currentCategory = 'all';
+let currentSubtype = null;
+let currentSort = 'price-desc';
+let currentMaxPrice = 3000;
+
 // Setup search functionality
 function setupSearch() {
   const searchInput = document.getElementById('product-search');
@@ -559,17 +677,9 @@ function showNotification(message, type = 'info') {
 
 // Load product data
 function loadProducts() {
-  // Вече имаме данни за продуктите, сега просто ги рендерираме
+  // Продуктите са вече дефинирани по-горе, просто ги рендерираме
   renderProducts();
-    {
-      id: '2',
-      name: 'Професионална Работна Станция',
-      price: 2499.99,
-      description: 'Проектирана за професионалисти с Xeon процесор, NVIDIA Quadro и 64GB ECC RAM.',
-      image: 'https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      category: 'prebuilt',
-      subtype: 'workstation'
-    },
+}
     {
       id: '3',
       name: 'Начален Геймърски Компютър',
