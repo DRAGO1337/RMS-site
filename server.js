@@ -20,6 +20,17 @@ server.post('/api/register', async (req, res) => {
   try {
     const { name, email, password, phone, address } = req.body;
     
+    // Validate input
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Please provide name, email, and password' });
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Please provide a valid email address' });
+    }
+    
     // Check if user already exists
     const existingUser = await pool.query(
       'SELECT * FROM users WHERE email = $1',
@@ -27,12 +38,14 @@ server.post('/api/register', async (req, res) => {
     );
     
     if (existingUser.rows.length > 0) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'User with this email already exists' });
     }
     
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    
+    console.log('Attempting to create user:', { name, email, phone, address });
     
     // Insert user
     const newUser = await pool.query(
@@ -40,14 +53,26 @@ server.post('/api/register', async (req, res) => {
       [name, email, hashedPassword, phone || null, address || null]
     );
     
+    console.log('User created successfully:', newUser.rows[0]);
+    
     // Return user info (without password)
     res.status(201).json({
       user: newUser.rows[0],
       message: 'Registration successful'
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Registration error:', err);
+    
+    // Provide more specific error messages
+    if (err.code === '23505') {
+      return res.status(400).json({ message: 'User with this email already exists' });
+    }
+    
+    if (err.code === '23502') {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    
+    res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 });
 

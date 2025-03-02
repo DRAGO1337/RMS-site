@@ -113,9 +113,22 @@ function setupAuthListeners() {
       const phone = document.getElementById('signup-phone')?.value || '';
       const address = document.getElementById('signup-address')?.value || '';
       
+      // Validate form data
+      if (!name || !email || !password) {
+        showNotification('Моля, попълнете всички задължителни полета.', 'error');
+        return;
+      }
+      
       // Validate passwords match
       if (password !== confirmPassword) {
         showNotification('Паролите не съвпадат.', 'error');
+        return;
+      }
+      
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showNotification('Моля, въведете валиден имейл адрес.', 'error');
         return;
       }
       
@@ -150,6 +163,8 @@ function setupAuthListeners() {
         
         // Close modal
         document.getElementById('auth-modal').style.display = 'none';
+        
+        console.log('User registered successfully:', currentUser);
       } catch (error) {
         console.error('Registration error:', error);
         showNotification(error.message || 'Грешка при регистрация. Моля опитайте отново.', 'error');
@@ -210,19 +225,15 @@ function updateUIForLoggedOutUser() {
 
 // Utility function to show notifications
 function showNotification(message, type = 'info') {
-  // Prevent recursion by checking if we're already in the auth.js showNotification
+  // Prevent recursion issues completely
   if (window.inAuthNotification) {
     return;
   }
   
-  // Check if the function is already defined globally but is not this function
-  if (typeof window.showNotification === 'function' && window.showNotification !== showNotification) {
-    window.showNotification(message, type);
-    return;
-  }
-  
-  // Otherwise define our own implementation
+  // Set recursion guard
   window.inAuthNotification = true;
+  
+  // Don't try to call other implementations - always use our own
   
   const notification = document.createElement('div');
   notification.classList.add('notification', type);
