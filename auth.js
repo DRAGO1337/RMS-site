@@ -290,7 +290,7 @@ function updateUIForLoggedInUser() {
         profileLink.addEventListener('click', profileLink.onclick);
         ordersLink.addEventListener('click', ordersLink.onclick);
         settingsLink.addEventListener('click', settingsLink.onclick);
-        
+
         if (logoutBtn) {
           logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -312,11 +312,11 @@ function updateUIForLoggedInUser() {
     profileLink.addEventListener('click', (e) => {
       e.preventDefault();
       const user = JSON.parse(localStorage.getItem('currentUser'));
-      
+
       // Създаване на страница за профил
       const profilePage = `
         <link href="profile.css" rel="stylesheet" type="text/css" />
-        
+
         <section class="profile-section">
           <div class="container">
             <div class="profile-container">
@@ -329,7 +329,7 @@ function updateUIForLoggedInUser() {
                   <p>Регистриран от ${new Date(user.created_at).toLocaleDateString()}</p>
                 </div>
               </div>
-              
+
               <div class="profile-details">
                 <div class="profile-info-box">
                   <h3>Лична Информация</h3>
@@ -346,7 +346,7 @@ function updateUIForLoggedInUser() {
                     <div class="info-value">${user.id}</div>
                   </div>
                 </div>
-                
+
                 <div class="profile-info-box">
                   <h3>Сигурност</h3>
                   <div class="info-row">
@@ -356,7 +356,7 @@ function updateUIForLoggedInUser() {
                   <button class="btn-profile btn-outline" id="change-password-btn">Смяна на Парола</button>
                 </div>
               </div>
-              
+
               <div class="profile-actions">
                 <button class="btn-profile btn-outline" id="back-to-home">Назад към Началото</button>
               </div>
@@ -364,17 +364,16 @@ function updateUIForLoggedInUser() {
           </div>
         </section>
       `;
-      
+
       // Запазване на текущото съдържание и актуализиране
       const currentContent = document.body.innerHTML;
       document.body.innerHTML = profilePage;
-      
+
       // Добавяне на слушатели за събития
       document.getElementById('back-to-home').addEventListener('click', () => {
-        document.body.innerHTML = currentContent;
-        reattachEventListeners();
+        window.location.href = 'index.html';
       });
-      
+
       document.getElementById('change-password-btn').addEventListener('click', () => {
         alert('Функционалността за смяна на парола ще бъде внедрена скоро.');
       });
@@ -382,11 +381,11 @@ function updateUIForLoggedInUser() {
 
     ordersLink.addEventListener('click', (e) => {
       e.preventDefault();
-      
+
       // Създаване на страница за поръчки
       const ordersPage = `
         <link href="profile.css" rel="stylesheet" type="text/css" />
-        
+
         <section class="profile-section">
           <div class="container">
             <div class="profile-container">
@@ -396,7 +395,7 @@ function updateUIForLoggedInUser() {
                   <p>Преглед и проследяване на вашите покупки</p>
                 </div>
               </div>
-              
+
               <div class="orders-empty">
                 <i class="fas fa-shopping-bag"></i>
                 <h3>Все още няма поръчки</h3>
@@ -410,17 +409,16 @@ function updateUIForLoggedInUser() {
           </div>
         </section>
       `;
-      
+
       // Запазване на текущото съдържание и актуализиране
       const currentContent = document.body.innerHTML;
       document.body.innerHTML = ordersPage;
-      
+
       // Добавяне на слушатели за събития
       document.getElementById('back-to-home').addEventListener('click', () => {
-        document.body.innerHTML = currentContent;
-        reattachEventListeners();
+        window.location.href = 'index.html';
       });
-      
+
       document.getElementById('browse-products').addEventListener('click', () => {
         window.location.href = 'products.html';
       });
@@ -429,11 +427,11 @@ function updateUIForLoggedInUser() {
     settingsLink.addEventListener('click', (e) => {
       e.preventDefault();
       const user = JSON.parse(localStorage.getItem('currentUser'));
-      
+
       // Създаване на страница за настройки
       const settingsPage = `
         <link href="profile.css" rel="stylesheet" type="text/css" />
-        
+
         <section class="profile-section">
           <div class="container">
             <div class="profile-container">
@@ -443,28 +441,28 @@ function updateUIForLoggedInUser() {
                   <p>Управлявайте информацията и предпочитанията за вашия акаунт</p>
                 </div>
               </div>
-              
+
               <form class="settings-form" id="settings-form">
                 <div class="settings-form-group">
                   <label for="settings-name">Пълно Име</label>
                   <input type="text" id="settings-name" value="${user.name}" required>
                 </div>
-                
+
                 <div class="settings-form-group">
                   <label for="settings-email">Имейл Адрес</label>
                   <input type="email" id="settings-email" value="${user.email}" required>
                 </div>
-                
+
                 <div class="settings-form-group">
                   <label for="settings-phone">Телефонен Номер</label>
                   <input type="tel" id="settings-phone" placeholder="Добавете вашия телефонен номер">
                 </div>
-                
+
                 <div class="settings-form-group">
                   <label for="settings-address">Адрес</label>
                   <input type="text" id="settings-address" placeholder="Добавете вашия адрес">
                 </div>
-                
+
                 <div class="settings-form-group full-width">
                   <label for="settings-preferences">Предпочитания за Комуникация</label>
                   <div style="margin-top: 0.5rem;">
@@ -476,13 +474,13 @@ function updateUIForLoggedInUser() {
                     <label for="prefs-marketing" style="display: inline; margin-left: 0.5rem;">Маркетингови имейли за нови продукти и оферти</label>
                   </div>
                 </div>
-                
+
                 <div class="profile-actions full-width">
                   <button type="button" class="btn-profile btn-outline" id="back-to-home">Отказ</button>
                   <button type="submit" class="btn-profile btn-primary">Запази Промените</button>
                 </div>
               </form>
-              
+
               <div class="danger-zone">
                 <h3>Опасна Зона</h3>
                 <p>След като изтриете акаунта си, няма връщане назад. Моля, бъдете сигурни.</p>
@@ -492,22 +490,21 @@ function updateUIForLoggedInUser() {
           </div>
         </section>
       `;
-      
+
       // Запазване на текущото съдържание и актуализиране
       const currentContent = document.body.innerHTML;
       document.body.innerHTML = settingsPage;
-      
+
       // Добавяне на слушатели за събития
       document.getElementById('back-to-home').addEventListener('click', () => {
-        document.body.innerHTML = currentContent;
-        reattachEventListeners();
+        window.location.href = 'index.html';
       });
-      
+
       document.getElementById('settings-form').addEventListener('submit', (e) => {
         e.preventDefault();
         alert('Настройките ви бяха запазени успешно!');
       });
-      
+
       document.getElementById('delete-account').addEventListener('click', () => {
         if (confirm('Сигурни ли сте, че искате да изтриете профила си? Това действие не може да бъде отменено.')) {
           alert('Функционалността за изтриване на акаунт ще бъде внедрена скоро.');
