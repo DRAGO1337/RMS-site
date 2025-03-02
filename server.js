@@ -13,7 +13,14 @@ server.use(bodyParser.json());
 server.use(express.static('./'));
 
 // Initialize database
-initDb();
+(async () => {
+  try {
+    await initDb();
+    console.log("Database initialized successfully");
+  } catch (err) {
+    console.error("Failed to initialize database:", err.message);
+  }
+})();
 
 // Authentication endpoints
 server.post('/api/register', async (req, res) => {
