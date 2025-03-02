@@ -1,4 +1,3 @@
-
 // Products page functionality
 let products = [];
 let currentCategory = 'all';
@@ -8,10 +7,10 @@ let currentMaxPrice = 3000;
 
 document.addEventListener('DOMContentLoaded', function() {
   loadProducts();
-  
+
   // Set up event listeners for filters
   setupFilterListeners();
-  
+
   // Initialize cart data from localStorage
   initCartFromStorage();
 });
@@ -239,7 +238,7 @@ function loadProducts() {
       subtype: null
     }
   ];
-  
+
   renderProducts();
 }
 
@@ -247,20 +246,20 @@ function loadProducts() {
 function renderProducts() {
   const productsGrid = document.getElementById('products-grid');
   productsGrid.innerHTML = '';
-  
+
   let filteredProducts = products.filter(product => {
     // Filter by category
     const categoryMatch = currentCategory === 'all' || product.category === currentCategory;
-    
+
     // Filter by subtype if applicable
     const subtypeMatch = !currentSubtype || product.subtype === currentSubtype;
-    
+
     // Filter by price
     const priceMatch = product.price <= currentMaxPrice;
-    
+
     return categoryMatch && subtypeMatch && priceMatch;
   });
-  
+
   // Sort products
   filteredProducts.sort((a, b) => {
     if (currentSort === 'price-asc') {
@@ -269,13 +268,13 @@ function renderProducts() {
       return b.price - a.price;
     }
   });
-  
+
   // Display filtered and sorted products
   if (filteredProducts.length === 0) {
     productsGrid.innerHTML = '<p class="no-products">Няма намерени продукти, отговарящи на филтрите.</p>';
     return;
   }
-  
+
   filteredProducts.forEach(product => {
     const productCard = document.createElement('div');
     productCard.classList.add('product-card');
@@ -283,7 +282,7 @@ function renderProducts() {
     if (product.subtype) {
       productCard.setAttribute('data-subtype', product.subtype);
     }
-    
+
     productCard.innerHTML = `
       <div class="product-image">
         <img src="${product.image}" alt="${product.name}">
@@ -295,10 +294,10 @@ function renderProducts() {
         <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">Добави в Кошницата</button>
       </div>
     `;
-    
+
     productsGrid.appendChild(productCard);
   });
-  
+
   // Add event listeners to newly created add-to-cart buttons
   const addToCartButtons = document.querySelectorAll('.add-to-cart');
   addToCartButtons.forEach(button => {
@@ -319,9 +318,9 @@ function setupFilterListeners() {
     button.addEventListener('click', function() {
       document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
       this.classList.add('active');
-      
+
       currentCategory = this.getAttribute('data-category');
-      
+
       // Show/hide computer type filters based on category
       const prebuiltFilters = document.querySelector('.prebuilt-filters');
       if (currentCategory === 'prebuilt' || currentCategory === 'all') {
@@ -331,11 +330,11 @@ function setupFilterListeners() {
         currentSubtype = null; // Reset subtype if not in prebuilt category
         document.querySelectorAll('.sub-filter-btn').forEach(btn => btn.classList.remove('active'));
       }
-      
+
       renderProducts();
     });
   });
-  
+
   // Subtype (computer type) filter buttons
   document.querySelectorAll('.sub-filter-btn').forEach(button => {
     button.addEventListener('click', function() {
@@ -348,26 +347,26 @@ function setupFilterListeners() {
         this.classList.add('active');
         currentSubtype = this.getAttribute('data-subtype');
       }
-      
+
       renderProducts();
     });
   });
-  
+
   // Sort buttons
   document.querySelectorAll('.sort-btn').forEach(button => {
     button.addEventListener('click', function() {
       document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
       this.classList.add('active');
-      
+
       currentSort = this.getAttribute('data-sort');
       renderProducts();
     });
   });
-  
+
   // Price range slider
   const priceRange = document.getElementById('price-range');
   const currentMaxPriceElement = document.getElementById('current-max-price');
-  
+
   priceRange.addEventListener('input', function() {
     currentMaxPrice = parseInt(this.value);
     currentMaxPriceElement.textContent = `${currentMaxPrice} лв.`;
@@ -377,10 +376,11 @@ function setupFilterListeners() {
 
 // Cart functionality
 function initCartFromStorage() {
-  if (typeof cart === 'undefined') {
+  // Initialize window.cart only if it doesn't exist
+  if (!window.cart) {
     window.cart = [];
   }
-  
+
   const savedCart = localStorage.getItem('cart');
   if (savedCart) {
     window.cart = JSON.parse(savedCart);
@@ -391,7 +391,7 @@ function initCartFromStorage() {
 function addToCart(id, name, price) {
   // Check if product is already in cart
   const existingItem = window.cart.find(item => item.id === id);
-  
+
   if (existingItem) {
     existingItem.quantity++;
   } else {
@@ -402,13 +402,13 @@ function addToCart(id, name, price) {
       quantity: 1
     });
   }
-  
+
   // Save cart to localStorage
   localStorage.setItem('cart', JSON.stringify(window.cart));
-  
+
   // Update cart UI
   updateCartCount();
-  
+
   // Show notification
   showNotification(`${name} добавен в кошницата!`);
 }
@@ -424,13 +424,13 @@ function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.classList.add('notification', type);
   notification.textContent = message;
-  
+
   document.body.appendChild(notification);
-  
+
   setTimeout(() => {
     notification.classList.add('show');
   }, 10);
-  
+
   setTimeout(() => {
     notification.classList.remove('show');
     setTimeout(() => {
@@ -445,13 +445,13 @@ function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.classList.add('notification', type);
   notification.textContent = message;
-  
+
   document.body.appendChild(notification);
-  
+
   setTimeout(() => {
     notification.classList.add('show');
   }, 10);
-  
+
   setTimeout(() => {
     notification.classList.remove('show');
     setTimeout(() => {

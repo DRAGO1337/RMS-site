@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RigMasters - Продукти</title>
+  <title>RigMasters - Products</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link href="products.css" rel="stylesheet" type="text/css" />
@@ -32,15 +32,15 @@
     </div>
   </header>
 
-  <section class="product-page">
+  <section class="products-section">
     <div class="container">
-      <h2 class="section-title">Всички Продукти</h2>
+      <h2 class="section-title">Нашите Продукти</h2>
       
       <div class="products-layout">
-        <div class="filter-sidebar">
+        <div class="filters-sidebar">
           <div class="filter-section">
             <h3>Категории</h3>
-            <ul class="category-filters">
+            <ul>
               <li><button class="filter-btn active" data-category="all">Всички</button></li>
               <li><button class="filter-btn" data-category="prebuilt">Готови Компютри</button></li>
               <li><button class="filter-btn" data-category="components">Компоненти</button></li>
@@ -137,6 +137,10 @@
     </div>
   </footer>
 
+  <script>
+  // Initialize window.cart variable before loading products.js
+  window.cart = [];
+  </script>
   <script src="products.js"></script>
 </body>
 </html>
