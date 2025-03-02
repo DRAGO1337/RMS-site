@@ -24,17 +24,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const checkoutBtn = document.getElementById('checkout-btn');
   const addToCartButtons = document.querySelectorAll('.add-to-cart');
   const categoryTabs = document.querySelectorAll('.tab');
-  
+
   // Add to cart functionality
   addToCartButtons.forEach(button => {
     button.addEventListener('click', function() {
       const id = this.getAttribute('data-id');
       const name = this.getAttribute('data-name');
       const price = parseFloat(this.getAttribute('data-price'));
-      
+
       // Check if product is already in cart
       const existingItem = cart.find(item => item.id === id);
-      
+
       if (existingItem) {
         existingItem.quantity++;
       } else {
@@ -45,59 +45,59 @@ document.addEventListener('DOMContentLoaded', function() {
           quantity: 1
         });
       }
-      
+
       updateCart();
       showNotification(`${name} added to cart!`);
     });
   });
-  
+
   // Open cart modal
   cartBtn.addEventListener('click', function(e) {
     e.preventDefault();
     cartModal.style.display = 'block';
     updateCartItems();
   });
-  
+
   // Close cart modal
   closeBtn.addEventListener('click', function() {
     cartModal.style.display = 'none';
   });
-  
+
   // Close modal when clicking outside
   window.addEventListener('click', function(e) {
     if (e.target === cartModal) {
       cartModal.style.display = 'none';
     }
   });
-  
+
   // Checkout functionality
   checkoutBtn.addEventListener('click', function() {
     if (cart.length === 0) {
       showNotification('Вашата кошница е празна!', 'warning');
       return;
     }
-    
+
     // Save cart to localStorage before redirecting
     localStorage.setItem('cart', JSON.stringify(cart));
-    
+
     showNotification('Пренасочване към плащане...', 'success');
     setTimeout(() => {
       window.location.href = 'checkout.html';
     }, 1000);
   });
-  
+
   // Category tabs functionality
   categoryTabs.forEach(tab => {
     tab.addEventListener('click', function() {
       const category = this.getAttribute('data-category');
-      
+
       // Set active tab
       categoryTabs.forEach(tab => tab.classList.remove('active'));
       this.classList.add('active');
-      
+
       // Filter products
       const productCards = document.querySelectorAll('.product-card');
-      
+
       productCards.forEach(card => {
         if (category === 'all' || card.getAttribute('data-category') === category) {
           card.style.display = 'block';
@@ -107,30 +107,30 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
-  
+
   // Update cart count and total
   function updateCart() {
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
     cartCount.textContent = totalItems;
-    
+
     const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     cartTotalPrice.textContent = `${totalPrice.toFixed(2)} лв.`;
-    
+
     // Save cart to localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
-    
+
     updateCartItems();
   }
-  
+
   // Update cart items in modal
   function updateCartItems() {
     cartItems.innerHTML = '';
-    
+
     if (cart.length === 0) {
       cartItems.innerHTML = '<p>Your cart is empty.</p>';
       return;
     }
-    
+
     cart.forEach(item => {
       const cartItem = document.createElement('div');
       cartItem.classList.add('cart-item');
@@ -148,32 +148,32 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
       cartItems.appendChild(cartItem);
     });
-    
+
     // Add event listeners for quantity buttons
     document.querySelectorAll('.quantity-btn.minus').forEach(button => {
       button.addEventListener('click', function() {
         const id = this.getAttribute('data-id');
         const item = cart.find(item => item.id === id);
-        
+
         if (item && item.quantity > 1) {
           item.quantity--;
           updateCart();
         }
       });
     });
-    
+
     document.querySelectorAll('.quantity-btn.plus').forEach(button => {
       button.addEventListener('click', function() {
         const id = this.getAttribute('data-id');
         const item = cart.find(item => item.id === id);
-        
+
         if (item) {
           item.quantity++;
           updateCart();
         }
       });
     });
-    
+
     document.querySelectorAll('.remove-item').forEach(button => {
       button.addEventListener('click', function() {
         const id = this.getAttribute('data-id');
@@ -182,19 +182,19 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-  
+
   // Notification system
   function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.classList.add('notification', type);
     notification.textContent = message;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
       notification.classList.add('show');
     }, 10);
-    
+
     setTimeout(() => {
       notification.classList.remove('show');
       setTimeout(() => {
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 300);
     }, 3000);
   }
-  
+
   // Add notification styles
   const style = document.createElement('style');
   style.textContent = `
@@ -220,34 +220,34 @@ document.addEventListener('DOMContentLoaded', function() {
       transform: translateY(20px);
       transition: opacity 0.3s, transform 0.3s;
     }
-    
+
     .notification.show {
       opacity: 1;
       transform: translateY(0);
     }
-    
+
     .notification.success {
       background-color: #10b981;
     }
-    
+
     .notification.warning {
       background-color: #f59e0b;
     }
-    
+
     .notification.error {
       background-color: #ef4444;
     }
   `;
   document.head.appendChild(style);
-  
+
   // Add smooth scrolling
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       e.preventDefault();
-      
+
       const targetId = this.getAttribute('href');
       if (targetId === '#') return;
-      
+
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         window.scrollTo({
@@ -257,15 +257,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  
+
   // Highlight the active navigation link based on the current page or section
   function setActiveNavLink() {
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('nav ul li a');
-    
+
     // Remove active class from all links
     navLinks.forEach(link => link.classList.remove('active'));
-    
+
     // If we're on the home page
     if (currentPath === '/' || currentPath.includes('index.html')) {
       // Check if we're at a specific section
@@ -293,16 +293,16 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   }
-  
+
   // Set active nav link on page load
   setActiveNavLink();
-  
+
   // Update active nav link when scrolling on home page
   if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
     window.addEventListener('scroll', () => {
       const sections = document.querySelectorAll('section[id]');
       let currentSection = '';
-      
+
       sections.forEach(section => {
         const sectionTop = section.offsetTop - 100;
         const sectionHeight = section.offsetHeight;
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
           currentSection = '#' + section.getAttribute('id');
         }
       });
-      
+
       if (currentSection) {
         document.querySelectorAll('nav ul li a').forEach(link => {
           link.classList.remove('active');
@@ -320,5 +320,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     });
+  }
+
+  // Added functions based on incomplete changes
+  function initCart() {
+    //This function is incomplete as its implementation is missing from the provided code
+  }
+
+  function addToCart(id, name, price) {
+    //This function is incomplete as its implementation is missing from the provided code
+
   }
 });

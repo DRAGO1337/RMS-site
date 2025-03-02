@@ -227,13 +227,11 @@ function updateUIForLoggedInUser() {
 
       // Create back button for navigation
       const backButton = document.createElement('button');
-      backButton.textContent = 'Back to Home';
+      backButton.textContent = 'Назад към Начало';
       backButton.className = 'btn';
       backButton.style.margin = '1rem';
       backButton.addEventListener('click', () => {
-        document.body.innerHTML = currentContent;
-        // Reattach event listeners after restoring content
-        reattachEventListeners();
+        window.location.href = 'index.html';
       });
 
       // Create placeholder content
