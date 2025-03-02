@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RigMasters - Продукти</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="products.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>RigMasters</h1>
+        <p>Your computer heaven</p>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Начало</a></li>
+          <li><a href="products.html" class="active">Продукти</a></li>
+          <li><a href="index.html#services">Услуги</a></li>
+          <li><a href="index.html#about">За нас</a></li>
+          <li><a href="index.html#contact">Контакти</a></li>
+        </ul>
+      </nav>
+      <div class="cart-icon">
+        <a href="#" id="cart-btn"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <section class="product-page">
+    <div class="container">
+      <h2 class="section-title">Всички Продукти</h2>
+      
+      <div class="products-layout">
+        <div class="filter-sidebar">
+          <div class="filter-section">
+            <h3>Категории</h3>
+            <ul class="category-filters">
+              <li><button class="filter-btn active" data-category="all">Всички</button></li>
+              <li><button class="filter-btn" data-category="prebuilt">Готови Компютри</button></li>
+              <li><button class="filter-btn" data-category="components">Компоненти</button></li>
+              <li><button class="filter-btn" data-category="peripherals">Периферия</button></li>
+            </ul>
+          </div>
+          
+          <div class="filter-section prebuilt-filters">
+            <h3>Тип Компютър</h3>
+            <ul>
+              <li><button class="sub-filter-btn" data-subtype="light-gaming">Лек Гейминг</button></li>
+              <li><button class="sub-filter-btn" data-subtype="heavy-gaming">Тежък Гейминг</button></li>
+              <li><button class="sub-filter-btn" data-subtype="workstation">Работна Станция</button></li>
+            </ul>
+          </div>
+          
+          <div class="filter-section">
+            <h3>Цена</h3>
+            <ul>
+              <li><button class="sort-btn" data-sort="price-asc">Цена (Възходяща)</button></li>
+              <li><button class="sort-btn active" data-sort="price-desc">Цена (Низходяща)</button></li>
+            </ul>
+          </div>
+          
+          <div class="filter-section">
+            <h3>Ценови Диапазон</h3>
+            <div class="price-range">
+              <input type="range" id="price-range" min="0" max="3000" step="100" value="3000">
+              <div class="price-values">
+                <span>0 лв.</span>
+                <span id="current-max-price">3000 лв.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="products-container">
+          <div class="products-grid" id="products-grid">
+            <!-- Products will be loaded dynamically via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="cart-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Вашата Кошница</h2>
+      <div id="cart-items">
+        <!-- Cart items will be added here by JS -->
+      </div>
+      <div class="cart-total">
+        <p>Общо: <span id="cart-total-price">0.00 лв.</span></p>
+      </div>
+      <button id="checkout-btn" class="btn">Продължи към Плащане</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h2>RigMasters</h2>
+          <p>Вашият Компютърен Рай</p>
+        </div>
+        <div class="footer-links">
+          <h3>Бързи Връзки</h3>
+          <ul>
+            <li><a href="index.html">Начало</a></li>
+            <li><a href="products.html">Продукти</a></li>
+            <li><a href="index.html#services">Услуги</a></li>
+            <li><a href="index.html#about">За нас</a></li>
+            <li><a href="index.html#contact">Контакти</a></li>
+          </ul>
+        </div>
+        <div class="footer-newsletter">
+          <h3>Абонирайте се за Нашия Бюлетин</h3>
+          <form>
+            <input type="email" placeholder="Вашият имейл адрес" required>
+            <button type="submit">Абонирай се</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 RigMasters. Всички права запазени.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -288,6 +288,8 @@ nav ul li a.active::after {
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
+  display: inline-block;
+  text-decoration: none;
 }
 
 .tab.active, .tab:hover {

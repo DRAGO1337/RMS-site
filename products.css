@@ -1,0 +1,110 @@
+
+/* Products Page Specific Styles */
+.product-page {
+  padding: 5rem 0;
+  background-color: #f5f8ff;
+  min-height: 70vh;
+}
+
+.products-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+}
+
+.filter-sidebar {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+}
+
+.filter-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.filter-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.filter-btn, .sub-filter-btn, .sort-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--dark-color);
+  transition: var(--transition);
+  text-align: left;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.filter-btn:hover, .sub-filter-btn:hover, .sort-btn:hover,
+.filter-btn.active, .sub-filter-btn.active, .sort-btn.active {
+  background-color: #e9f0ff;
+  color: var(--primary-color);
+}
+
+.filter-btn.active, .sub-filter-btn.active, .sort-btn.active {
+  font-weight: 600;
+}
+
+.price-range {
+  padding: 0.5rem 0;
+}
+
+.price-range input {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.price-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.products-container {
+  width: 100%;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.prebuilt-filters {
+  display: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .products-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-sidebar {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}

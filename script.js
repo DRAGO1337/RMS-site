@@ -2,8 +2,19 @@
 // Cart functionality
 let cart = [];
 
+// Load cart from localStorage if available
+function loadCartFromStorage() {
+  const savedCart = localStorage.getItem('cart');
+  if (savedCart) {
+    cart = JSON.parse(savedCart);
+  }
+  return cart;
+}
+
 // DOM elements
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize cart from localStorage
+  cart = loadCartFromStorage();
   const cartBtn = document.getElementById('cart-btn');
   const cartModal = document.getElementById('cart-modal');
   const closeBtn = document.querySelector('.close');
@@ -104,6 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     cartTotalPrice.textContent = `${totalPrice.toFixed(2)} лв.`;
+    
+    // Save cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
     
     updateCartItems();
   }
