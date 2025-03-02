@@ -376,24 +376,26 @@ function setupFilterListeners() {
 }
 
 // Cart functionality
-let cart = [];
-
 function initCartFromStorage() {
+  if (typeof cart === 'undefined') {
+    window.cart = [];
+  }
+  
   const savedCart = localStorage.getItem('cart');
   if (savedCart) {
-    cart = JSON.parse(savedCart);
+    window.cart = JSON.parse(savedCart);
     updateCartCount();
   }
 }
 
 function addToCart(id, name, price) {
   // Check if product is already in cart
-  const existingItem = cart.find(item => item.id === id);
+  const existingItem = window.cart.find(item => item.id === id);
   
   if (existingItem) {
     existingItem.quantity++;
   } else {
-    cart.push({
+    window.cart.push({
       id,
       name,
       price,
@@ -402,7 +404,7 @@ function addToCart(id, name, price) {
   }
   
   // Save cart to localStorage
-  localStorage.setItem('cart', JSON.stringify(cart));
+  localStorage.setItem('cart', JSON.stringify(window.cart));
   
   // Update cart UI
   updateCartCount();
@@ -413,11 +415,32 @@ function addToCart(id, name, price) {
 
 function updateCartCount() {
   const cartCount = document.getElementById('cart-count');
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  const totalItems = window.cart.reduce((total, item) => total + item.quantity, 0);
   cartCount.textContent = totalItems;
 }
 
 // Notification system
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.classList.add('notification', type);
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 3000);
+}
+
+
+// Notification system (copied from script.js to avoid require)
 function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.classList.add('notification', type);
