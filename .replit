@@ -8,3 +8,14 @@ channel = "stable-23_11"
 [deployment]
 publicDir = "/"
 deploymentTarget = "static"
+
+[workflows]
+runButton = "Run Server"
+
+[[workflows.workflow]]
+name = "Run Server"
+author = 21453808
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node index.js"
