@@ -103,9 +103,54 @@
   }
 }
 
+@media (max-width: 768px) {
+  .filter-sidebar {
+    padding: 1rem;
+  }
+  
+  .products-grid {
+    gap: 1.5rem;
+  }
+  
+  .product-card {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 576px) {
   .products-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .filter-section h3 {
+    font-size: 1rem;
+  }
+  
+  .filter-btn, .sub-filter-btn, .sort-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
+  
+  .product-info h3 {
+    font-size: 1.2rem;
+  }
+  
+  .products-container {
+    padding: 0 0.5rem;
+  }
+  
+  .product-page {
+    padding: 3rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-image {
+    height: 180px;
+  }
+  
+  .price-range {
+    margin: 0;
   }
 }
 /* Cart animation styles */
