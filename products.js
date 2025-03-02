@@ -115,6 +115,7 @@ function animateCartAddition(id) {
 function setupCartModal() {
   const cartBtn = document.getElementById('cart-btn');
   const cartModal = document.getElementById('cart-modal');
+  const checkoutBtn = document.getElementById('checkout-btn');
   
   if (cartBtn && cartModal) {
     // Open cart modal
@@ -138,6 +139,24 @@ function setupCartModal() {
         cartModal.style.display = 'none';
       }
     });
+    
+    // Setup checkout button
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', function() {
+        if (window.cart.length === 0) {
+          showNotification('Вашата кошница е празна!', 'warning');
+          return;
+        }
+        
+        // Save cart to localStorage before redirecting
+        localStorage.setItem('cart', JSON.stringify(window.cart));
+        
+        showNotification('Пренасочване към плащане...', 'success');
+        setTimeout(() => {
+          window.location.href = 'checkout.html';
+        }, 1000);
+      });
+    }
   }
 }
 
