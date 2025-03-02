@@ -1,91 +1,77 @@
+const fs = require('fs');
+const path = require('path');
 
-const { Pool } = require('pg');
+// Database file paths
+const USERS_FILE = path.join(__dirname, 'data', 'users.json');
+const ORDERS_FILE = path.join(__dirname, 'data', 'orders.json');
 
-// Database connection configuration
-const pool = new Pool({
-  user: process.env.PGUSER || 'postgres',
-  host: process.env.PGHOST || 'localhost', 
-  database: process.env.PGDATABASE || 'rigmasters',
-  password: process.env.PGPASSWORD || 'postgres',
-  port: process.env.PGPORT || 5432,
-  // Adding connection timeout
-  connectionTimeoutMillis: 5000,
-  // Increase query timeout
-  statement_timeout: 10000
-});
+// Ensure data directory exists
+function ensureDataDir() {
+  const dataDir = path.join(__dirname, 'data');
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir);
+  }
+}
 
-// Test database connection
-async function testConnection() {
+// Initialize database files
+function initDb() {
+  ensureDataDir();
+
+  // Create users file if not exists
+  if (!fs.existsSync(USERS_FILE)) {
+    fs.writeFileSync(USERS_FILE, JSON.stringify([]));
+  }
+
+  // Create orders file if not exists
+  if (!fs.existsSync(ORDERS_FILE)) {
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify([]));
+  }
+
+  console.log('Database files initialized successfully');
+}
+
+// Get all users
+function getUsers() {
   try {
-    console.log('Testing database connection...');
-    const client = await pool.connect();
-    client.release();
-    console.log('Database connection successful!');
+    const data = fs.readFileSync(USERS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Error reading users file:', err);
+    return [];
+  }
+}
+
+// Save users to file
+function saveUsers(users) {
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
     return true;
   } catch (err) {
-    console.error('Database connection error:', err);
+    console.error('Error writing users file:', err);
     return false;
   }
 }
 
-// Initialize database by creating tables if they don't exist
-async function initDb() {
+// Get all orders
+function getOrders() {
   try {
-    // First check if the database is available
-    const isConnected = await testConnection();
-    
-    if (!isConnected) {
-      console.log('Database not available, running in memory-only mode');
-      return false;
-    }
-    
-    // Create users table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(100) NOT NULL,
-        phone VARCHAR(20),
-        address TEXT,
-        created_at TIMESTAMP DEFAULT NOW()
-      )
-    `);
-    
-    // Create orders table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS user_orders (
-        id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id),
-        total_amount DECIMAL(10, 2) NOT NULL,
-        shipping_address TEXT,
-        status VARCHAR(20) DEFAULT 'pending',
-        created_at TIMESTAMP DEFAULT NOW()
-      )
-    `);
-    
-    // Create order items table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS order_items (
-        id SERIAL PRIMARY KEY,
-        order_id INTEGER REFERENCES user_orders(id),
-        product_id INTEGER NOT NULL,
-        product_name VARCHAR(100) NOT NULL,
-        quantity INTEGER NOT NULL,
-        price DECIMAL(10, 2) NOT NULL
-      )
-    `);
-    
-    console.log('Database tables initialized successfully');
+    const data = fs.readFileSync(ORDERS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Error reading orders file:', err);
+    return [];
+  }
+}
+
+// Save orders to file
+function saveOrders(orders) {
+  try {
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2));
     return true;
   } catch (err) {
-    console.error('Error initializing database:', err);
+    console.error('Error writing orders file:', err);
     return false;
   }
 }
 
-module.exports = {
-  pool,
-  initDb,
-  testConnection
-};
+module.exports = { initDb, getUsers, saveUsers, getOrders, saveOrders };
