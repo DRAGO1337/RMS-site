@@ -1,19 +1,45 @@
 
-require('dotenv').config();
 const { Pool } = require('pg');
 
-// Database connection
+// Database connection configuration
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  user: process.env.PGUSER || 'postgres',
+  host: process.env.PGHOST || 'localhost', 
+  database: process.env.PGDATABASE || 'rigmasters',
+  password: process.env.PGPASSWORD || 'postgres',
+  port: process.env.PGPORT || 5432,
+  // Adding connection timeout
+  connectionTimeoutMillis: 5000,
+  // Increase query timeout
+  statement_timeout: 10000
 });
 
-// Initialize database tables
+// Test database connection
+async function testConnection() {
+  try {
+    console.log('Testing database connection...');
+    const client = await pool.connect();
+    client.release();
+    console.log('Database connection successful!');
+    return true;
+  } catch (err) {
+    console.error('Database connection error:', err);
+    return false;
+  }
+}
+
+// Initialize database by creating tables if they don't exist
 async function initDb() {
   try {
-    // Create users table if not exists
+    // First check if the database is available
+    const isConnected = await testConnection();
+    
+    if (!isConnected) {
+      console.log('Database not available, running in memory-only mode');
+      return false;
+    }
+    
+    // Create users table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -22,28 +48,28 @@ async function initDb() {
         password VARCHAR(100) NOT NULL,
         phone VARCHAR(20),
         address TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT NOW()
       )
     `);
     
-    // Create user_orders table if not exists
+    // Create orders table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS user_orders (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
         total_amount DECIMAL(10, 2) NOT NULL,
-        shipping_address TEXT NOT NULL,
+        shipping_address TEXT,
         status VARCHAR(20) DEFAULT 'pending',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT NOW()
       )
     `);
     
-    // Create order_items table if not exists
+    // Create order items table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS order_items (
         id SERIAL PRIMARY KEY,
         order_id INTEGER REFERENCES user_orders(id),
-        product_id VARCHAR(20) NOT NULL,
+        product_id INTEGER NOT NULL,
         product_name VARCHAR(100) NOT NULL,
         quantity INTEGER NOT NULL,
         price DECIMAL(10, 2) NOT NULL
@@ -51,9 +77,15 @@ async function initDb() {
     `);
     
     console.log('Database tables initialized successfully');
+    return true;
   } catch (err) {
     console.error('Error initializing database:', err);
+    return false;
   }
 }
 
-module.exports = { pool, initDb };
+module.exports = {
+  pool,
+  initDb,
+  testConnection
+};
