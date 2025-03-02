@@ -257,4 +257,68 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+  
+  // Highlight the active navigation link based on the current page or section
+  function setActiveNavLink() {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('nav ul li a');
+    
+    // Remove active class from all links
+    navLinks.forEach(link => link.classList.remove('active'));
+    
+    // If we're on the home page
+    if (currentPath === '/' || currentPath.includes('index.html')) {
+      // Check if we're at a specific section
+      const hash = window.location.hash;
+      if (hash) {
+        // Try to highlight the nav link for this section
+        const sectionLink = document.querySelector(`nav ul li a[href="${hash}"]`);
+        if (sectionLink) {
+          sectionLink.classList.add('active');
+          return;
+        }
+      }
+      // Default to home link if no section or section link not found
+      const homeLink = document.querySelector('nav ul li a[href="#"]');
+      if (homeLink) homeLink.classList.add('active');
+    } 
+    // For other pages
+    else {
+      // Find the corresponding nav link
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && currentPath.includes(href)) {
+          link.classList.add('active');
+        }
+      });
+    }
+  }
+  
+  // Set active nav link on page load
+  setActiveNavLink();
+  
+  // Update active nav link when scrolling on home page
+  if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section[id]');
+      let currentSection = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+          currentSection = '#' + section.getAttribute('id');
+        }
+      });
+      
+      if (currentSection) {
+        document.querySelectorAll('nav ul li a').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === currentSection) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }
 });
