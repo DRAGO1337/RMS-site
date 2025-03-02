@@ -56,25 +56,31 @@ function setupAuthListeners() {
   // Login form submission
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
       
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      
-      // Check if user exists
-      const user = users.find(u => u.email === email && u.password === password);
-      
-      if (user) {
+      try {
+        // Show loading indicator
+        showNotification('Влизане...', 'info');
+        
+        // Call login API
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Грешка при влизане');
+        }
+        
         // Login successful
-        currentUser = {
-          id: user.id,
-          name: user.name,
-          email: user.email
-        };
+        currentUser = data.user;
         
         // Save current user to localStorage
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -83,13 +89,13 @@ function setupAuthListeners() {
         updateUIForLoggedInUser();
         
         // Show success notification
-        showNotification(`Добре дошли, ${user.name}!`, 'success');
+        showNotification(`Добре дошли, ${currentUser.name}!`, 'success');
         
         // Close modal
         document.getElementById('auth-modal').style.display = 'none';
-      } else {
-        // Login failed
-        showNotification('Невалиден имейл или парола.', 'error');
+      } catch (error) {
+        console.error('Login error:', error);
+        showNotification(error.message || 'Невалиден имейл или парола.', 'error');
       }
     });
   }
@@ -97,7 +103,7 @@ function setupAuthListeners() {
   // Signup form submission
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
-    signupForm.addEventListener('submit', function(e) {
+    signupForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const name = document.getElementById('signup-name').value;
@@ -111,47 +117,41 @@ function setupAuthListeners() {
         return;
       }
       
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      
-      // Check if user already exists
-      if (users.some(user => user.email === email)) {
-        showNotification('Имейлът вече е регистриран.', 'error');
-        return;
+      try {
+        // Show loading indicator
+        showNotification('Регистрация...', 'info');
+        
+        // Call register API
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Грешка при регистрация');
+        }
+        
+        // Registration successful
+        currentUser = data.user;
+        
+        // Save current user to localStorage
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        // Update UI
+        updateUIForLoggedInUser();
+        
+        // Show success notification
+        showNotification(`Регистрацията е успешна! Добре дошли, ${currentUser.name}!`, 'success');
+        
+        // Close modal
+        document.getElementById('auth-modal').style.display = 'none';
+      } catch (error) {
+        console.error('Registration error:', error);
+        showNotification(error.message || 'Грешка при регистрация. Моля опитайте отново.', 'error');
       }
-      
-      // Create new user
-      const newUser = {
-        id: Date.now().toString(),
-        name,
-        email,
-        password
-      };
-      
-      // Add user to users array
-      users.push(newUser);
-      
-      // Save users to localStorage
-      localStorage.setItem('users', JSON.stringify(users));
-      
-      // Login the new user
-      currentUser = {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email
-      };
-      
-      // Save current user to localStorage
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      
-      // Update UI
-      updateUIForLoggedInUser();
-      
-      // Show success notification
-      showNotification(`Регистрацията е успешна! Добре дошли, ${newUser.name}!`, 'success');
-      
-      // Close modal
-      document.getElementById('auth-modal').style.display = 'none';
     });
   }
   
@@ -204,4 +204,31 @@ function updateUIForLoggedOutUser() {
   if (userMenu) {
     userMenu.style.display = 'none';
   }
+}
+
+// Utility function to show notifications
+function showNotification(message, type = 'info') {
+  // Check if the function is already defined in script.js
+  if (typeof window.showNotification === 'function') {
+    window.showNotification(message, type);
+    return;
+  }
+  
+  // Otherwise define our own implementation
+  const notification = document.createElement('div');
+  notification.classList.add('notification', type);
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 3000);
 }
