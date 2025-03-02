@@ -1,19 +1,251 @@
+
 // Products page functionality
+document.addEventListener('DOMContentLoaded', function() {
+  loadProducts();
+  setupFilterListeners();
+  initCart();
+});
+
+// Initialize cart
+function initCart() {
+  // Use window.cart to ensure it's accessible across pages
+  if (!window.cart) {
+    window.cart = [];
+  }
+
+  // Load cart from localStorage if available
+  const savedCart = localStorage.getItem('cart');
+  if (savedCart) {
+    window.cart = JSON.parse(savedCart);
+  }
+  
+  // Update cart count
+  updateCartCount();
+  
+  // Set up cart modal functionality
+  setupCartModal();
+}
+
+// Update cart count in the header
+function updateCartCount() {
+  const cartCount = document.getElementById('cart-count');
+  if (!window.cart) return;
+  
+  const totalItems = window.cart.reduce((total, item) => total + item.quantity, 0);
+  cartCount.textContent = totalItems;
+}
+
+// Add an item to the cart
+function addToCart(id, name, price) {
+  // Check if product is already in cart
+  const existingItem = window.cart.find(item => item.id === id);
+  
+  if (existingItem) {
+    existingItem.quantity++;
+  } else {
+    window.cart.push({
+      id,
+      name,
+      price,
+      quantity: 1
+    });
+  }
+  
+  // Save cart to localStorage
+  localStorage.setItem('cart', JSON.stringify(window.cart));
+  
+  // Update cart UI
+  updateCartCount();
+  
+  // Add animation effect
+  animateCartAddition(id);
+  
+  // Show notification
+  showNotification(`${name} добавен в кошницата!`);
+}
+
+// Animate cart addition
+function animateCartAddition(id) {
+  const cartIcon = document.querySelector('.cart-icon');
+  const button = document.querySelector(`.add-to-cart[data-id="${id}"]`);
+  
+  if (cartIcon && button) {
+    // Add shake effect to cart icon
+    cartIcon.classList.add('cart-shake');
+    
+    // Create an element that will animate to the cart
+    const animEl = document.createElement('div');
+    animEl.classList.add('cart-item-animation');
+    
+    // Get the position of the button and cart icon
+    const buttonRect = button.getBoundingClientRect();
+    const cartRect = cartIcon.getBoundingClientRect();
+    
+    // Position the animation element at the button
+    animEl.style.top = `${buttonRect.top + window.scrollY}px`;
+    animEl.style.left = `${buttonRect.left}px`;
+    animEl.style.width = '10px';
+    animEl.style.height = '10px';
+    animEl.style.backgroundColor = '#3b82f6';
+    animEl.style.borderRadius = '50%';
+    animEl.style.position = 'absolute';
+    animEl.style.transition = 'all 0.6s ease-in-out';
+    animEl.style.zIndex = '1000';
+    
+    // Add it to the body
+    document.body.appendChild(animEl);
+    
+    // Trigger animation to cart
+    setTimeout(() => {
+      animEl.style.top = `${cartRect.top + window.scrollY}px`;
+      animEl.style.left = `${cartRect.left}px`;
+      animEl.style.opacity = '0';
+      animEl.style.transform = 'scale(0.3)';
+    }, 10);
+    
+    // Remove the element after animation completes
+    setTimeout(() => {
+      animEl.remove();
+      cartIcon.classList.remove('cart-shake');
+    }, 800);
+  }
+}
+
+// Setup cart modal
+function setupCartModal() {
+  const cartBtn = document.getElementById('cart-btn');
+  const cartModal = document.getElementById('cart-modal');
+  
+  if (cartBtn && cartModal) {
+    // Open cart modal
+    cartBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      cartModal.style.display = 'block';
+      updateCartItems();
+    });
+    
+    // Close cart modal
+    const closeBtn = document.querySelector('.close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        cartModal.style.display = 'none';
+      });
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+      if (e.target === cartModal) {
+        cartModal.style.display = 'none';
+      }
+    });
+  }
+}
+
+// Update cart items in modal
+function updateCartItems() {
+  const cartItems = document.getElementById('cart-items');
+  const cartTotalPrice = document.getElementById('cart-total-price');
+  
+  if (!cartItems) return;
+  
+  cartItems.innerHTML = '';
+  
+  if (window.cart.length === 0) {
+    cartItems.innerHTML = '<p>Your cart is empty.</p>';
+    return;
+  }
+  
+  window.cart.forEach(item => {
+    const cartItem = document.createElement('div');
+    cartItem.classList.add('cart-item');
+    cartItem.innerHTML = `
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${item.price.toFixed(2)} лв. each</div>
+      </div>
+      <div class="cart-item-quantity">
+        <button class="quantity-btn minus" data-id="${item.id}">-</button>
+        <span>${item.quantity}</span>
+        <button class="quantity-btn plus" data-id="${item.id}">+</button>
+        <span class="remove-item" data-id="${item.id}">×</span>
+      </div>
+    `;
+    cartItems.appendChild(cartItem);
+  });
+  
+  // Add event listeners for quantity buttons
+  document.querySelectorAll('.quantity-btn.minus').forEach(button => {
+    button.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
+      const item = window.cart.find(item => item.id === id);
+      
+      if (item && item.quantity > 1) {
+        item.quantity--;
+        updateCart();
+      }
+    });
+  });
+  
+  document.querySelectorAll('.quantity-btn.plus').forEach(button => {
+    button.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
+      const item = window.cart.find(item => item.id === id);
+      
+      if (item) {
+        item.quantity++;
+        updateCart();
+      }
+    });
+  });
+  
+  document.querySelectorAll('.remove-item').forEach(button => {
+    button.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
+      window.cart = window.cart.filter(item => item.id !== id);
+      updateCart();
+    });
+  });
+  
+  // Update total price
+  if (cartTotalPrice) {
+    const totalPrice = window.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    cartTotalPrice.textContent = `${totalPrice.toFixed(2)} лв.`;
+  }
+}
+
+// Update cart function
+function updateCart() {
+  localStorage.setItem('cart', JSON.stringify(window.cart));
+  updateCartCount();
+  updateCartItems();
+}
+
+// Notification system
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.classList.add('notification', type);
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 3000);
+}
+
+// Products data
 let products = [];
 let currentCategory = 'all';
 let currentSubtype = null;
 let currentSort = 'price-desc';
 let currentMaxPrice = 3000;
-
-document.addEventListener('DOMContentLoaded', function() {
-  loadProducts();
-
-  // Set up event listeners for filters
-  setupFilterListeners();
-
-  // Initialize cart data from localStorage
-  initCartFromStorage();
-});
 
 // Load product data
 function loadProducts() {
@@ -367,95 +599,11 @@ function setupFilterListeners() {
   const priceRange = document.getElementById('price-range');
   const currentMaxPriceElement = document.getElementById('current-max-price');
 
-  priceRange.addEventListener('input', function() {
-    currentMaxPrice = parseInt(this.value);
-    currentMaxPriceElement.textContent = `${currentMaxPrice} лв.`;
-    renderProducts();
-  });
-}
-
-// Cart functionality
-function initCartFromStorage() {
-  // Initialize window.cart only if it doesn't exist
-  if (!window.cart) {
-    window.cart = [];
-  }
-
-  const savedCart = localStorage.getItem('cart');
-  if (savedCart) {
-    window.cart = JSON.parse(savedCart);
-    updateCartCount();
-  }
-}
-
-function addToCart(id, name, price) {
-  // Check if product is already in cart
-  const existingItem = window.cart.find(item => item.id === id);
-
-  if (existingItem) {
-    existingItem.quantity++;
-  } else {
-    window.cart.push({
-      id,
-      name,
-      price,
-      quantity: 1
+  if (priceRange && currentMaxPriceElement) {
+    priceRange.addEventListener('input', function() {
+      currentMaxPrice = parseInt(this.value);
+      currentMaxPriceElement.textContent = `${currentMaxPrice} лв.`;
+      renderProducts();
     });
   }
-
-  // Save cart to localStorage
-  localStorage.setItem('cart', JSON.stringify(window.cart));
-
-  // Update cart UI
-  updateCartCount();
-
-  // Show notification
-  showNotification(`${name} добавен в кошницата!`);
-}
-
-function updateCartCount() {
-  const cartCount = document.getElementById('cart-count');
-  const totalItems = window.cart.reduce((total, item) => total + item.quantity, 0);
-  cartCount.textContent = totalItems;
-}
-
-// Notification system
-function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.classList.add('notification', type);
-  notification.textContent = message;
-
-  document.body.appendChild(notification);
-
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => {
-      notification.remove();
-    }, 300);
-  }, 3000);
-}
-
-
-// Notification system (copied from script.js to avoid require)
-function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.classList.add('notification', type);
-  notification.textContent = message;
-
-  document.body.appendChild(notification);
-
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => {
-      notification.remove();
-    }, 300);
-  }, 3000);
 }

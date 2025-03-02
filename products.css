@@ -108,3 +108,24 @@
     grid-template-columns: 1fr;
   }
 }
+/* Cart animation styles */
+.cart-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
+}
+
+.cart-item-animation {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  z-index: 1000;
+  transition: all 0.6s ease-in-out;
+}
