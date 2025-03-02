@@ -338,15 +338,15 @@ nav ul li a.active::after {
 }
 
 .about-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
-.about-image {
-  border-radius: var(--border-radius);
-  overflow: hidden;
+.about-content.centered {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .about-text p {
