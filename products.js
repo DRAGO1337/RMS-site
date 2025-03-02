@@ -128,6 +128,115 @@ function loadProducts() {
       image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
       category: 'prebuilt',
       subtype: 'workstation'
+    },
+    // Added new products
+    {
+      id: '13',
+      name: 'RAM Kingston HyperX 32GB',
+      price: 189.99,
+      description: 'Високоскоростна DDR4 памет с RGB осветление, идеална за геймъри.',
+      image: 'https://images.unsplash.com/photo-1562076980-53ceb5d79296?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'components',
+      subtype: null
+    },
+    {
+      id: '14',
+      name: 'SSD Samsung 1TB',
+      price: 149.99,
+      description: 'Ултра бърз NVMe SSD с четене до 7000MB/s и запис 5000MB/s.',
+      image: 'https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'components',
+      subtype: null
+    },
+    {
+      id: '15',
+      name: 'Охладителна Система NZXT Kraken',
+      price: 179.99,
+      description: 'Водно охлаждане с LED дисплей и RGB вентилатори.',
+      image: 'https://images.unsplash.com/photo-1587135991058-8816b028691f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'components',
+      subtype: null
+    },
+    {
+      id: '16',
+      name: 'Геймърски Монитор 27" 240Hz',
+      price: 449.99,
+      description: '1ms време за отговор, G-Sync, HDR и IPS панел.',
+      image: 'https://images.unsplash.com/photo-1616763355548-1b606f439f86?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'peripherals',
+      subtype: null
+    },
+    {
+      id: '17',
+      name: 'Студентски ПК Сет',
+      price: 799.99,
+      description: 'Пълен комплект с компютър, монитор и периферия за студенти.',
+      image: 'https://images.unsplash.com/photo-1552831388-6a0b3575b32a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'prebuilt',
+      subtype: 'light-gaming'
+    },
+    {
+      id: '18',
+      name: 'Геймърска Видео Карта RX 6800 XT',
+      price: 689.99,
+      description: 'AMD конкурент на RTX серията с отлична производителност.',
+      image: 'https://images.unsplash.com/photo-1596838132731-3bc4a0a31b28?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'components',
+      subtype: null
+    },
+    {
+      id: '19',
+      name: 'Кутия Corsair 5000D Airflow',
+      price: 179.99,
+      description: 'Просторна с отличен въздушен поток и място за големи компоненти.',
+      image: 'https://images.unsplash.com/photo-1648126963542-597907a10b0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'components',
+      subtype: null
+    },
+    {
+      id: '20',
+      name: 'Захранване Corsair 850W Gold',
+      price: 149.99,
+      description: 'Модулно захранване с 80+ Gold сертификат и тихи вентилатори.',
+      image: 'https://images.unsplash.com/photo-1562976540-1502c2145186?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'components',
+      subtype: null
+    },
+    {
+      id: '21',
+      name: 'Ултра Геймърски ПК RTX 4090',
+      price: 3999.99,
+      description: 'Най-мощният геймърски компютър с топ компоненти и водно охлаждане.',
+      image: 'https://images.unsplash.com/photo-1625842268584-8f3296236761?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'prebuilt',
+      subtype: 'heavy-gaming'
+    },
+    {
+      id: '22',
+      name: 'Геймърски Бюро RGB',
+      price: 299.99,
+      description: 'Ергономично бюро с RGB осветление и държач за слушалки.',
+      image: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'peripherals',
+      subtype: null
+    },
+    {
+      id: '23',
+      name: 'Бюджетен ПК за Офис',
+      price: 649.99,
+      description: 'Идеален компютър за офис работа и интернет сърфиране.',
+      image: 'https://images.unsplash.com/photo-1595231776515-ddffb1f4eb73?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'prebuilt',
+      subtype: 'workstation'
+    },
+    {
+      id: '24',
+      name: 'Стриймърски Микрофон Blue Yeti',
+      price: 149.99,
+      description: 'Професионален USB микрофон с множество режими на запис.',
+      image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+      category: 'peripherals',
+      subtype: null
     }
   ];
   
