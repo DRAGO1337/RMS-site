@@ -110,6 +110,8 @@ function setupAuthListeners() {
       const email = document.getElementById('signup-email').value;
       const password = document.getElementById('signup-password').value;
       const confirmPassword = document.getElementById('signup-confirm-password').value;
+      const phone = document.getElementById('signup-phone')?.value || '';
+      const address = document.getElementById('signup-address')?.value || '';
       
       // Validate passwords match
       if (password !== confirmPassword) {
@@ -125,7 +127,7 @@ function setupAuthListeners() {
         const response = await fetch('/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password })
+          body: JSON.stringify({ name, email, password, phone, address })
         });
         
         const data = await response.json();

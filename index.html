@@ -15,14 +15,15 @@
       <button id="login-btn" class="login-btn">
         <i class="fas fa-user"></i> Вход
       </button>
-      <div id="user-menu" class="user-menu">
+      <div class="user-menu" id="user-menu">
         <div class="user-menu-btn">
           <i class="fas fa-user-circle"></i>
           <span id="user-name">Потребител</span>
           <div class="user-menu-dropdown">
-            <a href="#"><i class="fas fa-user"></i> Моят Профил</a>
-            <a href="#"><i class="fas fa-shopping-bag"></i> Поръчки</a>
-            <a href="#"><i class="fas fa-cog"></i> Настройки</a>
+            <a href="#" id="profile-link"><i class="fas fa-user"></i> Моят профил</a>
+            <a href="#" id="orders-link"><i class="fas fa-shopping-bag"></i> Моите поръчки</a>
+            <a href="#" id="wishlist-link"><i class="fas fa-heart"></i> Любими</a>
+            <a href="#" id="settings-link"><i class="fas fa-cog"></i> Настройки</a>
             <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Изход</a>
           </div>
         </div>
@@ -199,7 +200,7 @@
           <h2>RigMasters</h2>
           <p>Вашият Компютърен Рай</p>
         </div>
-        
+
         <div class="footer-newsletter">
           <h3>Абонирайте се за Нашия Бюлетин</h3>
           <form>
@@ -224,7 +225,7 @@
   <div id="auth-modal" class="auth-modal">
     <div class="auth-content">
       <span class="auth-close">&times;</span>
-      
+
       <!-- Login Form -->
       <form id="login-form" class="auth-form">
         <h2>Вход</h2>
@@ -237,23 +238,23 @@
           <input type="password" id="login-password" required placeholder="Въведете вашата парола">
         </div>
         <button type="submit" class="auth-btn">Вход</button>
-        
+
         <div class="auth-links">
           <p>Нямате акаунт? <a href="#" id="switch-to-signup">Регистрирайте се</a></p>
           <p><a href="#">Забравена парола?</a></p>
         </div>
-        
+
         <div class="auth-divider">
           <span>или влезте с</span>
         </div>
-        
+
         <div class="social-auth">
           <button type="button" class="social-auth-btn"><i class="fab fa-google"></i></button>
           <button type="button" class="social-auth-btn"><i class="fab fa-facebook-f"></i></button>
           <button type="button" class="social-auth-btn"><i class="fab fa-twitter"></i></button>
         </div>
       </form>
-      
+
       <!-- Signup Form -->
       <form id="signup-form" class="auth-form" style="display: none;">
         <h2>Регистрация</h2>
@@ -274,15 +275,15 @@
           <input type="password" id="signup-confirm-password" required placeholder="Потвърдете вашата парола">
         </div>
         <button type="submit" class="auth-btn">Регистрация</button>
-        
+
         <div class="auth-links">
           <p>Вече имате акаунт? <a href="#" id="switch-to-login">Влезте</a></p>
         </div>
-        
+
         <div class="auth-divider">
           <span>или регистрирайте се с</span>
         </div>
-        
+
         <div class="social-auth">
           <button type="button" class="social-auth-btn"><i class="fab fa-google"></i></button>
           <button type="button" class="social-auth-btn"><i class="fab fa-facebook-f"></i></button>
@@ -291,7 +292,7 @@
       </form>
     </div>
   </div>
-  
+
   <script src="script.js"></script>
   <script src="auth.js"></script>
 </body>
