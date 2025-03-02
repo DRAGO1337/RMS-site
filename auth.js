@@ -208,13 +208,20 @@ function updateUIForLoggedOutUser() {
 
 // Utility function to show notifications
 function showNotification(message, type = 'info') {
-  // Check if the function is already defined in script.js
-  if (typeof window.showNotification === 'function') {
+  // Prevent recursion by checking if we're already in the auth.js showNotification
+  if (window.inAuthNotification) {
+    return;
+  }
+  
+  // Check if the function is already defined globally but is not this function
+  if (typeof window.showNotification === 'function' && window.showNotification !== showNotification) {
     window.showNotification(message, type);
     return;
   }
   
   // Otherwise define our own implementation
+  window.inAuthNotification = true;
+  
   const notification = document.createElement('div');
   notification.classList.add('notification', type);
   notification.textContent = message;
@@ -229,6 +236,7 @@ function showNotification(message, type = 'info') {
     notification.classList.remove('show');
     setTimeout(() => {
       notification.remove();
+      window.inAuthNotification = false;
     }, 300);
   }, 3000);
 }

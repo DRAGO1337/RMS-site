@@ -1,8 +1,9 @@
 
 // Checkout page functionality
 document.addEventListener('DOMContentLoaded', function() {
-  // Retrieve cart from localStorage
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  // Retrieve cart from localStorage and make it a global window object
+  window.cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cart = window.cart;
   const checkoutItems = document.getElementById('checkout-items');
   const checkoutTotalPrice = document.getElementById('checkout-total-price');
   const paymentForm = document.getElementById('payment-form');

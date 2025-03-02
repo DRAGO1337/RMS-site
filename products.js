@@ -234,7 +234,9 @@ function updateCartItems() {
 
 // Update cart function
 function updateCart() {
+  // Make sure we're saving the current cart state
   localStorage.setItem('cart', JSON.stringify(window.cart));
+  console.log("Cart updated:", window.cart);
   updateCartCount();
   updateCartItems();
 }
