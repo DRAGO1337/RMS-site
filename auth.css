@@ -1,0 +1,265 @@
+
+/* Authentication Modal Styles */
+.auth-modal {
+  display: none;
+  position: fixed;
+  z-index: 300;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: auto;
+  backdrop-filter: blur(5px);
+}
+
+.auth-content {
+  position: relative;
+  background-color: white;
+  margin: 5% auto;
+  padding: 2.5rem;
+  border-radius: var(--border-radius);
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.auth-modal h2 {
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  color: var(--dark-color);
+  font-size: 1.8rem;
+}
+
+.auth-close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-color);
+  transition: var(--transition);
+}
+
+.auth-close:hover {
+  color: var(--danger-color);
+}
+
+.auth-form {
+  margin-top: 1rem;
+}
+
+.auth-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.auth-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.auth-form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.auth-form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.auth-btn:hover {
+  background-color: var(--secondary-color);
+}
+
+.auth-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--gray-color);
+}
+
+.auth-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+  color: var(--secondary-color);
+}
+
+.auth-divider {
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.auth-divider span {
+  padding: 0 10px;
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.social-auth {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #f5f8ff;
+  border: 1px solid #ddd;
+  color: var(--dark-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.social-auth-btn:hover {
+  background-color: #e9f0ff;
+  transform: translateY(-2px);
+}
+
+.user-menu {
+  display: none;
+  position: relative;
+}
+
+.user-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--dark-color);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.user-menu-btn i {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.user-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  min-width: 180px;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  z-index: 100;
+  display: none;
+}
+
+.user-menu-dropdown a {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: var(--dark-color);
+  transition: var(--transition);
+}
+
+.user-menu-dropdown a:hover {
+  background-color: #f5f8ff;
+}
+
+.user-menu-dropdown a i {
+  margin-right: 0.5rem;
+  color: var(--gray-color);
+}
+
+.user-menu-btn:hover .user-menu-dropdown {
+  display: block;
+}
+
+/* Login button in the top left */
+.login-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background-color: white;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.login-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.login-btn i {
+  margin-right: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .auth-content {
+    width: 90%;
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .auth-content {
+    padding: 1.5rem;
+  }
+  
+  .auth-modal h2 {
+    font-size: 1.5rem;
+  }
+}

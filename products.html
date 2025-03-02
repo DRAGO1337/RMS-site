@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link href="products.css" rel="stylesheet" type="text/css" />
-</head>
+  <link href="auth.css" rel="stylesheet" type="text/css" /> </head>
 
 <body>
   <header>
@@ -23,7 +23,7 @@
           <li><a href="index.html#services">Услуги</a></li>
           <li><a href="index.html#about">За нас</a></li>
           <li><a href="index.html#contact">Контакти</a></li>
-        </ul>
+          <li><a href="#" id="login-btn">Вход</a></li> </ul>
       </nav>
       <div class="cart-icon">
         <a href="#" id="cart-btn"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
@@ -99,6 +99,77 @@
     </div>
   </div>
 
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-content">
+      <span class="auth-close">&times;</span>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form">
+        <h2>Вход</h2>
+        <div class="auth-form-group">
+          <label for="login-email">Имейл</label>
+          <input type="email" id="login-email" required placeholder="Въведете вашия имейл">
+        </div>
+        <div class="auth-form-group">
+          <label for="login-password">Парола</label>
+          <input type="password" id="login-password" required placeholder="Въведете вашата парола">
+        </div>
+        <button type="submit" class="auth-btn">Вход</button>
+
+        <div class="auth-links">
+          <p>Нямате акаунт? <a href="#" id="switch-to-signup">Регистрирайте се</a></p>
+          <p><a href="#">Забравена парола?</a></p>
+        </div>
+
+        <div class="auth-divider">
+          <span>или влезте с</span>
+        </div>
+
+        <div class="social-auth">
+          <button type="button" class="social-auth-btn"><i class="fab fa-google"></i></button>
+          <button type="button" class="social-auth-btn"><i class="fab fa-facebook-f"></i></button>
+          <button type="button" class="social-auth-btn"><i class="fab fa-twitter"></i></button>
+        </div>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signup-form" class="auth-form" style="display: none;">
+        <h2>Регистрация</h2>
+        <div class="auth-form-group">
+          <label for="signup-name">Име</label>
+          <input type="text" id="signup-name" required placeholder="Въведете вашето име">
+        </div>
+        <div class="auth-form-group">
+          <label for="signup-email">Имейл</label>
+          <input type="email" id="signup-email" required placeholder="Въведете вашия имейл">
+        </div>
+        <div class="auth-form-group">
+          <label for="signup-password">Парола</label>
+          <input type="password" id="signup-password" required placeholder="Въведете парола">
+        </div>
+        <div class="auth-form-group">
+          <label for="signup-confirm-password">Потвърдете Парола</label>
+          <input type="password" id="signup-confirm-password" required placeholder="Потвърдете вашата парола">
+        </div>
+        <button type="submit" class="auth-btn">Регистрация</button>
+
+        <div class="auth-links">
+          <p>Вече имате акаунт? <a href="#" id="switch-to-login">Влезте</a></p>
+        </div>
+
+        <div class="auth-divider">
+          <span>или регистрирайте се с</span>
+        </div>
+
+        <div class="social-auth">
+          <button type="button" class="social-auth-btn"><i class="fab fa-google"></i></button>
+          <button type="button" class="social-auth-btn"><i class="fab fa-facebook-f"></i></button>
+          <button type="button" class="social-auth-btn"><i class="fab fa-twitter"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <footer>
     <div class="container">
       <div class="footer-content">
@@ -140,6 +211,8 @@
   // Initialize window.cart variable before loading products.js
   window.cart = [];
   </script>
+  <script src="script.js"></script>
   <script src="products.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>
