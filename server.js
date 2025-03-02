@@ -239,7 +239,15 @@ server.all('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', (err) => {
+    if (err) {
+        if (err.code === 'EADDRINUSE') {
+            console.error(`Port ${PORT} is already in use. The server may already be running.`);
+        } else {
+            console.error('Failed to start server:', err);
+        }
+        return;
+    }
     console.log(`Server running at http://0.0.0.0:${PORT}`);
     console.log('Press Ctrl+C to stop the server');
 });
