@@ -62,18 +62,17 @@ document.addEventListener('DOMContentLoaded', function() {
   // Checkout functionality
   checkoutBtn.addEventListener('click', function() {
     if (cart.length === 0) {
-      showNotification('Your cart is empty!', 'warning');
+      showNotification('Вашата кошница е празна!', 'warning');
       return;
     }
     
-    showNotification('Proceeding to checkout...', 'success');
-    // In a real implementation, this would redirect to a checkout page
+    // Save cart to localStorage before redirecting
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    showNotification('Пренасочване към плащане...', 'success');
     setTimeout(() => {
-      cart = [];
-      updateCart();
-      cartModal.style.display = 'none';
-      showNotification('Thank you for your purchase!', 'success');
-    }, 2000);
+      window.location.href = 'checkout.html';
+    }, 1000);
   });
   
   // Category tabs functionality
@@ -104,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cartCount.textContent = totalItems;
     
     const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-    cartTotalPrice.textContent = `$${totalPrice.toFixed(2)}`;
+    cartTotalPrice.textContent = `${totalPrice.toFixed(2)} лв.`;
     
     updateCartItems();
   }
@@ -124,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
       cartItem.innerHTML = `
         <div class="cart-item-info">
           <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+          <div class="cart-item-price">${item.price.toFixed(2)} лв. each</div>
         </div>
         <div class="cart-item-quantity">
           <button class="quantity-btn minus" data-id="${item.id}">-</button>

@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RigMasters - Плащане</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="checkout.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>RigMasters</h1>
+        <p>Your computer heaven</p>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Начало</a></li>
+          <li><a href="index.html#products">Продукти</a></li>
+          <li><a href="index.html#services">Услуги</a></li>
+          <li><a href="index.html#about">За нас</a></li>
+          <li><a href="index.html#contact">Контакти</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="checkout-section">
+    <div class="container">
+      <h2 class="section-title">Плащане</h2>
+      
+      <div class="checkout-container">
+        <div class="order-summary">
+          <h3>Вашата Поръчка</h3>
+          <div id="checkout-items">
+            <!-- Order items will be populated here via JavaScript -->
+          </div>
+          <div class="checkout-total">
+            <p>Общо: <span id="checkout-total-price">0.00 лв.</span></p>
+          </div>
+        </div>
+        
+        <div class="payment-form">
+          <h3>Информация за Доставка</h3>
+          <form id="payment-form">
+            <div class="form-columns">
+              <div class="form-column">
+                <div class="form-group">
+                  <label for="fullname">Име и Фамилия</label>
+                  <input type="text" id="fullname" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Имейл</label>
+                  <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                  <label for="phone">Телефон</label>
+                  <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                  <label for="address">Адрес</label>
+                  <input type="text" id="address" required>
+                </div>
+                <div class="form-group">
+                  <label for="city">Град</label>
+                  <input type="text" id="city" required>
+                </div>
+                <div class="form-group">
+                  <label for="postcode">Пощенски Код</label>
+                  <input type="text" id="postcode" required>
+                </div>
+              </div>
+              
+              <div class="form-column">
+                <h3>Информация за Плащане</h3>
+                <div class="form-group">
+                  <label for="card-name">Име на Картата</label>
+                  <input type="text" id="card-name" required>
+                </div>
+                <div class="form-group">
+                  <label for="card-number">Номер на Картата</label>
+                  <input type="text" id="card-number" placeholder="XXXX XXXX XXXX XXXX" required>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="expiry">Валидна до</label>
+                    <input type="text" id="expiry" placeholder="MM/YY" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" placeholder="123" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <button type="submit" class="btn" id="complete-order-btn">Направи Поръчка</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h2>RigMasters</h2>
+          <p>Вашият Компютърен Рай</p>
+        </div>
+        <div class="footer-links">
+          <h3>Бързи Връзки</h3>
+          <ul>
+            <li><a href="index.html">Начало</a></li>
+            <li><a href="index.html#products">Продукти</a></li>
+            <li><a href="index.html#services">Услуги</a></li>
+            <li><a href="index.html#about">За нас</a></li>
+            <li><a href="index.html#contact">Контакти</a></li>
+          </ul>
+        </div>
+        <div class="footer-newsletter">
+          <h3>Абонирайте се за Нашия Бюлетин</h3>
+          <form>
+            <input type="email" placeholder="Вашият имейл адрес" required>
+            <button type="submit">Абонирай се</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 RigMasters. Всички права запазени.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
