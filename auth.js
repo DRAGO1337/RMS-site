@@ -279,37 +279,30 @@ function updateUIForLoggedInUser() {
         // Re-get DOM elements after they were recreated
         const profileLink = document.getElementById('profile-link');
         const ordersLink = document.getElementById('orders-link');
-        const wishlistLink = document.getElementById('wishlist-link');
         const settingsLink = document.getElementById('settings-link');
+        const logoutBtn = document.getElementById('logout-btn');
 
         // Menu hover events
         userMenu.addEventListener('mouseenter', handleMenuMouseEnter);
         userMenu.addEventListener('mouseleave', handleMenuMouseLeave);
 
         // User profile actions
-        profileLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          const user = JSON.parse(localStorage.getItem('user'));
-          createPlaceholderPage('My Profile', `Welcome ${user.name}! Your profile is under construction.`);
-        });
-
-        ordersLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          createPlaceholderPage('My Orders', 'Your order history will be displayed here. No orders found yet.');
-        });
-
-        wishlistLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          createPlaceholderPage('My Wishlist', 'Your wishlist is empty. Browse our products to add items!');
-        });
-
-        settingsLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          createPlaceholderPage('Account Settings', 'Here you can change your account settings, password, and preferences.');
-        });
+        profileLink.addEventListener('click', profileLink.onclick);
+        ordersLink.addEventListener('click', ordersLink.onclick);
+        settingsLink.addEventListener('click', settingsLink.onclick);
+        
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateUIForLoggedOutUser();
+            showNotification('Излязохте успешно от профила си.', 'info');
+            window.location.reload();
+          });
+        }
 
         // Reattach other event listeners (if needed)
-
     }
 
     userMenu.addEventListener('mouseenter', handleMenuMouseEnter);
@@ -318,23 +311,208 @@ function updateUIForLoggedInUser() {
 
     profileLink.addEventListener('click', (e) => {
       e.preventDefault();
-      const user = JSON.parse(localStorage.getItem('user'));
-      createPlaceholderPage('My Profile', `Welcome ${user.name}! Your profile is under construction.`);
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      
+      // Create the profile page
+      const profilePage = `
+        <link href="profile.css" rel="stylesheet" type="text/css" />
+        
+        <section class="profile-section">
+          <div class="container">
+            <div class="profile-container">
+              <div class="profile-header">
+                <div class="profile-avatar">
+                  ${user.name.charAt(0).toUpperCase()}
+                </div>
+                <div class="profile-title">
+                  <h2>${user.name}</h2>
+                  <p>Member since ${new Date(user.created_at).toLocaleDateString()}</p>
+                </div>
+              </div>
+              
+              <div class="profile-details">
+                <div class="profile-info-box">
+                  <h3>Personal Information</h3>
+                  <div class="info-row">
+                    <div class="info-label">Name</div>
+                    <div class="info-value">${user.name}</div>
+                  </div>
+                  <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">${user.email}</div>
+                  </div>
+                  <div class="info-row">
+                    <div class="info-label">User ID</div>
+                    <div class="info-value">${user.id}</div>
+                  </div>
+                </div>
+                
+                <div class="profile-info-box">
+                  <h3>Security</h3>
+                  <div class="info-row">
+                    <div class="info-label">Password</div>
+                    <div class="info-value">••••••••</div>
+                  </div>
+                  <button class="btn-profile btn-outline" id="change-password-btn">Change Password</button>
+                </div>
+              </div>
+              
+              <div class="profile-actions">
+                <button class="btn-profile btn-outline" id="back-to-home">Back to Home</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+      
+      // Save current content and update
+      const currentContent = document.body.innerHTML;
+      document.body.innerHTML = profilePage;
+      
+      // Add event listeners
+      document.getElementById('back-to-home').addEventListener('click', () => {
+        document.body.innerHTML = currentContent;
+        reattachEventListeners();
+      });
+      
+      document.getElementById('change-password-btn').addEventListener('click', () => {
+        alert('Password change functionality will be implemented soon.');
+      });
     });
 
     ordersLink.addEventListener('click', (e) => {
       e.preventDefault();
-      createPlaceholderPage('My Orders', 'Your order history will be displayed here. No orders found yet.');
-    });
-
-    wishlistLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      createPlaceholderPage('My Wishlist', 'Your wishlist is empty. Browse our products to add items!');
+      
+      // Create the orders page
+      const ordersPage = `
+        <link href="profile.css" rel="stylesheet" type="text/css" />
+        
+        <section class="profile-section">
+          <div class="container">
+            <div class="profile-container">
+              <div class="profile-header">
+                <div class="profile-title">
+                  <h2>My Orders</h2>
+                  <p>View and track your purchases</p>
+                </div>
+              </div>
+              
+              <div class="orders-empty">
+                <i class="fas fa-shopping-bag"></i>
+                <h3>No orders yet</h3>
+                <p>Once you make a purchase, your orders will appear here. Browse our products and find something you'll love!</p>
+                <div class="profile-actions" style="justify-content: center; margin-top: 2rem;">
+                  <button class="btn-profile btn-primary" id="browse-products">Browse Products</button>
+                  <button class="btn-profile btn-outline" id="back-to-home">Back to Home</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+      
+      // Save current content and update
+      const currentContent = document.body.innerHTML;
+      document.body.innerHTML = ordersPage;
+      
+      // Add event listeners
+      document.getElementById('back-to-home').addEventListener('click', () => {
+        document.body.innerHTML = currentContent;
+        reattachEventListeners();
+      });
+      
+      document.getElementById('browse-products').addEventListener('click', () => {
+        window.location.href = 'products.html';
+      });
     });
 
     settingsLink.addEventListener('click', (e) => {
       e.preventDefault();
-      createPlaceholderPage('Account Settings', 'Here you can change your account settings, password, and preferences.');
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      
+      // Create the settings page
+      const settingsPage = `
+        <link href="profile.css" rel="stylesheet" type="text/css" />
+        
+        <section class="profile-section">
+          <div class="container">
+            <div class="profile-container">
+              <div class="profile-header">
+                <div class="profile-title">
+                  <h2>Account Settings</h2>
+                  <p>Manage your account information and preferences</p>
+                </div>
+              </div>
+              
+              <form class="settings-form" id="settings-form">
+                <div class="settings-form-group">
+                  <label for="settings-name">Full Name</label>
+                  <input type="text" id="settings-name" value="${user.name}" required>
+                </div>
+                
+                <div class="settings-form-group">
+                  <label for="settings-email">Email Address</label>
+                  <input type="email" id="settings-email" value="${user.email}" required>
+                </div>
+                
+                <div class="settings-form-group">
+                  <label for="settings-phone">Phone Number</label>
+                  <input type="tel" id="settings-phone" placeholder="Add your phone number">
+                </div>
+                
+                <div class="settings-form-group">
+                  <label for="settings-address">Address</label>
+                  <input type="text" id="settings-address" placeholder="Add your address">
+                </div>
+                
+                <div class="settings-form-group full-width">
+                  <label for="settings-preferences">Communication Preferences</label>
+                  <div style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="prefs-email" checked>
+                    <label for="prefs-email" style="display: inline; margin-left: 0.5rem;">Email notifications about my orders</label>
+                  </div>
+                  <div style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="prefs-marketing" checked>
+                    <label for="prefs-marketing" style="display: inline; margin-left: 0.5rem;">Marketing emails about new products and offers</label>
+                  </div>
+                </div>
+                
+                <div class="profile-actions full-width">
+                  <button type="button" class="btn-profile btn-outline" id="back-to-home">Cancel</button>
+                  <button type="submit" class="btn-profile btn-primary">Save Changes</button>
+                </div>
+              </form>
+              
+              <div class="danger-zone">
+                <h3>Danger Zone</h3>
+                <p>Once you delete your account, there is no going back. Please be certain.</p>
+                <button class="delete-account-btn" id="delete-account">Delete My Account</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+      
+      // Save current content and update
+      const currentContent = document.body.innerHTML;
+      document.body.innerHTML = settingsPage;
+      
+      // Add event listeners
+      document.getElementById('back-to-home').addEventListener('click', () => {
+        document.body.innerHTML = currentContent;
+        reattachEventListeners();
+      });
+      
+      document.getElementById('settings-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Your settings have been saved successfully!');
+      });
+      
+      document.getElementById('delete-account').addEventListener('click', () => {
+        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+          alert('Account deletion functionality will be implemented soon.');
+        }
+      });
     });
   }
 }

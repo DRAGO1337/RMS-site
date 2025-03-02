@@ -1,0 +1,231 @@
+
+/* Profile Pages Styles */
+.profile-section {
+  padding: 5rem 0;
+  background-color: #f5f8ff;
+  min-height: 70vh;
+}
+
+.profile-container {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-right: 1.5rem;
+}
+
+.profile-title h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.profile-title p {
+  margin: 0.5rem 0 0;
+  color: var(--gray-color);
+}
+
+/* Profile Details */
+.profile-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.profile-info-box {
+  background-color: #f8fafc;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+}
+
+.profile-info-box h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.info-label {
+  width: 120px;
+  font-weight: 600;
+  color: var(--gray-color);
+}
+
+.info-value {
+  flex: 1;
+}
+
+/* Order History */
+.orders-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.orders-empty i {
+  font-size: 4rem;
+  color: var(--primary-color);
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.orders-empty h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.orders-empty p {
+  color: var(--gray-color);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Settings Page */
+.settings-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.settings-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.settings-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.settings-form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.danger-zone {
+  margin-top: 3rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+}
+
+.danger-zone h3 {
+  color: var(--danger-color);
+  margin-bottom: 1rem;
+}
+
+.danger-zone p {
+  color: var(--gray-color);
+  margin-bottom: 1rem;
+}
+
+.delete-account-btn {
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.delete-account-btn:hover {
+  background-color: #e11d48;
+}
+
+/* Profile Actions */
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-profile {
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .settings-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .full-width {
+    grid-column: span 1;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .profile-avatar {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
