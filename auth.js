@@ -214,6 +214,128 @@ function updateUIForLoggedInUser() {
     if (userName && currentUser) {
       userName.textContent = currentUser.name;
     }
+    // Add event listeners for profile menu items
+    const profileLink = document.getElementById('profile-link');
+    const ordersLink = document.getElementById('orders-link');
+    const wishlistLink = document.getElementById('wishlist-link');
+    const settingsLink = document.getElementById('settings-link');
+
+    // Create placeholder pages
+    function createPlaceholderPage(title, content) {
+      // Save the current body content
+      const currentContent = document.body.innerHTML;
+
+      // Create back button for navigation
+      const backButton = document.createElement('button');
+      backButton.textContent = 'Back to Home';
+      backButton.className = 'btn';
+      backButton.style.margin = '1rem';
+      backButton.addEventListener('click', () => {
+        document.body.innerHTML = currentContent;
+        // Reattach event listeners after restoring content
+        reattachEventListeners();
+      });
+
+      // Create placeholder content
+      const container = document.createElement('div');
+      container.className = 'container';
+      container.style.padding = '2rem';
+      container.style.textAlign = 'center';
+
+      const heading = document.createElement('h2');
+      heading.textContent = title;
+      heading.className = 'section-title';
+
+      const paragraph = document.createElement('p');
+      paragraph.textContent = content;
+      paragraph.style.margin = '2rem 0';
+
+      // Assemble the page
+      container.appendChild(backButton);
+      container.appendChild(heading);
+      container.appendChild(paragraph);
+
+      // Replace the body content
+      document.body.innerHTML = '';
+      document.body.appendChild(container);
+    }
+
+    // Keep dropdown menu open with a small delay
+    let menuTimeout;
+
+    function handleMenuMouseEnter() {
+      clearTimeout(menuTimeout);
+      userMenu.classList.add('active');
+    }
+
+    function handleMenuMouseLeave() {
+      menuTimeout = setTimeout(() => {
+        userMenu.classList.remove('active');
+      }, 500); // 500ms delay before closing
+    }
+
+    // Reattach event listeners after DOM changes
+    function reattachEventListeners() {
+        // Re-get DOM elements after they were recreated
+        const profileLink = document.getElementById('profile-link');
+        const ordersLink = document.getElementById('orders-link');
+        const wishlistLink = document.getElementById('wishlist-link');
+        const settingsLink = document.getElementById('settings-link');
+
+        // Menu hover events
+        userMenu.addEventListener('mouseenter', handleMenuMouseEnter);
+        userMenu.addEventListener('mouseleave', handleMenuMouseLeave);
+
+        // User profile actions
+        profileLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          const user = JSON.parse(localStorage.getItem('user'));
+          createPlaceholderPage('My Profile', `Welcome ${user.name}! Your profile is under construction.`);
+        });
+
+        ordersLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          createPlaceholderPage('My Orders', 'Your order history will be displayed here. No orders found yet.');
+        });
+
+        wishlistLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          createPlaceholderPage('My Wishlist', 'Your wishlist is empty. Browse our products to add items!');
+        });
+
+        settingsLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          createPlaceholderPage('Account Settings', 'Here you can change your account settings, password, and preferences.');
+        });
+
+        // Reattach other event listeners (if needed)
+
+    }
+
+    userMenu.addEventListener('mouseenter', handleMenuMouseEnter);
+    userMenu.addEventListener('mouseleave', handleMenuMouseLeave);
+
+
+    profileLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const user = JSON.parse(localStorage.getItem('user'));
+      createPlaceholderPage('My Profile', `Welcome ${user.name}! Your profile is under construction.`);
+    });
+
+    ordersLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      createPlaceholderPage('My Orders', 'Your order history will be displayed here. No orders found yet.');
+    });
+
+    wishlistLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      createPlaceholderPage('My Wishlist', 'Your wishlist is empty. Browse our products to add items!');
+    });
+
+    settingsLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      createPlaceholderPage('Account Settings', 'Here you can change your account settings, password, and preferences.');
+    });
   }
 }
 

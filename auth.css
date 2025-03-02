@@ -200,7 +200,10 @@
   padding: 0.5rem 0;
   margin-top: 0.5rem;
   z-index: 100;
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
 }
 
 .user-menu-dropdown a {
@@ -219,8 +222,18 @@
   color: var(--gray-color);
 }
 
-.user-menu:hover .user-menu-dropdown {
-  display: block;
+.user-menu:hover .user-menu-dropdown,
+.user-menu.active .user-menu-dropdown,
+.user-menu-dropdown:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-menu-dropdown {
+  /* This increases the invisible hit area to prevent accidental hover-out */
+  padding-top: 15px;
+  margin-top: -10px;
 }
 
 /* Login button in the top right */
