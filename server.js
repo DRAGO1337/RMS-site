@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
-const { initDb, getUsers, saveUsers, getOrders, saveOrders } = require('./db');
+const db = require('./dbConfig');
 
 const server = express();
 
@@ -12,6 +12,38 @@ server.use(bodyParser.json());
 server.use(express.static('./'));
 
 // Initialize database
+async function initDb() {
+  try {
+    // Create users table if it doesn't exist
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    
+    // Create orders table if it doesn't exist
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id VARCHAR(255) PRIMARY KEY,
+        user_id VARCHAR(255) REFERENCES users(id),
+        total_amount NUMERIC(10,2) NOT NULL,
+        shipping_address JSONB,
+        items JSONB,
+        status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    
+    console.log('Database tables initialized successfully');
+  } catch (err) {
+    console.error('Error initializing database:', err);
+  }
+}
+
 initDb();
 
 // Authentication endpoints
@@ -33,12 +65,9 @@ server.post('/api/register', async (req, res) => {
       return res.status(400).json({ message: 'Please provide a valid email address' });
     }
 
-    // Get all users
-    const users = getUsers();
-
     // Check if user already exists
-    const existingUser = users.find(user => user.email === email);
-    if (existingUser) {
+    const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (existingUser.rows.length > 0) {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
 
@@ -47,22 +76,16 @@ server.post('/api/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create new user
-    const newUser = {
-      id: Date.now().toString(),
-      name,
-      email,
-      password: hashedPassword,
-      created_at: new Date().toISOString()
-    };
+    const userId = Date.now().toString();
+    const result = await db.query(
+      'INSERT INTO users (id, name, email, password, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, created_at',
+      [userId, name, email, hashedPassword, new Date().toISOString()]
+    );
 
-    // Add user to database
-    users.push(newUser);
-    saveUsers(users);
+    const newUser = result.rows[0];
 
-    // Return user info (without password)
-    const { password: _, ...userWithoutPassword } = newUser;
     res.status(201).json({
-      user: userWithoutPassword,
+      user: newUser,
       message: 'Registration successful'
     });
   } catch (err) {
@@ -75,14 +98,14 @@ server.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Get all users
-    const users = getUsers();
-
     // Find user
-    const user = users.find(user => user.email === email);
-    if (!user) {
+    const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    
+    if (result.rows.length === 0) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
+    
+    const user = result.rows[0];
 
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -103,56 +126,43 @@ server.post('/api/login', async (req, res) => {
 });
 
 // User account endpoints
-server.get('/api/user/:id', (req, res) => {
+server.get('/api/user/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Get all users
-    const users = getUsers();
-
     // Find user
-    const user = users.find(user => user.id === id);
-    if (!user) {
+    const result = await db.query('SELECT id, name, email, created_at FROM users WHERE id = $1', [id]);
+    
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    // Return user info (without password)
-    const { password, ...userWithoutPassword } = user;
-    res.json(userWithoutPassword);
+    
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-server.put('/api/user/:id', (req, res) => {
+server.put('/api/user/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email } = req.body;
 
-    // Get all users
-    const users = getUsers();
-
-    // Find user index
-    const userIndex = users.findIndex(user => user.id === id);
-    if (userIndex === -1) {
+    // Check if user exists
+    const checkResult = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+    if (checkResult.rows.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     // Update user
-    users[userIndex] = {
-      ...users[userIndex],
-      name,
-      email
-    };
+    const result = await db.query(
+      'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING id, name, email, created_at',
+      [name, email, id]
+    );
 
-    // Save users
-    saveUsers(users);
-
-    // Return updated user (without password)
-    const { password, ...userWithoutPassword } = users[userIndex];
     res.json({
-      user: userWithoutPassword,
+      user: result.rows[0],
       message: 'Profile updated successfully'
     });
   } catch (err) {
@@ -162,30 +172,19 @@ server.put('/api/user/:id', (req, res) => {
 });
 
 // Order management endpoints
-server.post('/api/orders', (req, res) => {
+server.post('/api/orders', async (req, res) => {
   try {
     const { userId, totalAmount, shippingAddress, items } = req.body;
 
-    // Get all orders
-    const orders = getOrders();
-
     // Create the order
-    const newOrder = {
-      id: Date.now().toString(),
-      userId,
-      totalAmount,
-      shippingAddress,
-      items,
-      status: 'pending',
-      created_at: new Date().toISOString()
-    };
-
-    // Add order to database
-    orders.push(newOrder);
-    saveOrders(orders);
+    const orderId = Date.now().toString();
+    await db.query(
+      'INSERT INTO orders (id, user_id, total_amount, shipping_address, items, status, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [orderId, userId, totalAmount, JSON.stringify(shippingAddress), JSON.stringify(items), 'pending', new Date().toISOString()]
+    );
 
     res.status(201).json({
-      orderId: newOrder.id,
+      orderId: orderId,
       message: 'Order placed successfully'
     });
   } catch (err) {
@@ -194,37 +193,32 @@ server.post('/api/orders', (req, res) => {
   }
 });
 
-server.get('/api/orders/user/:userId', (req, res) => {
+server.get('/api/orders/user/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // Get all orders
-    const orders = getOrders();
-
-    // Filter orders by user ID
-    const userOrders = orders.filter(order => order.userId === userId);
-
-    res.json(userOrders);
+    // Get user orders
+    const result = await db.query('SELECT * FROM orders WHERE user_id = $1', [userId]);
+    
+    res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-server.get('/api/orders/:orderId/items', (req, res) => {
+server.get('/api/orders/:orderId/items', async (req, res) => {
   try {
     const { orderId } = req.params;
 
-    // Get all orders
-    const orders = getOrders();
-
     // Find order
-    const order = orders.find(order => order.id === orderId);
-    if (!order) {
+    const result = await db.query('SELECT items FROM orders WHERE id = $1', [orderId]);
+    
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Order not found' });
     }
-
-    res.json(order.items);
+    
+    res.json(result.rows[0].items);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
