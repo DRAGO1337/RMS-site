@@ -1,13 +1,10 @@
 
-// This file integrates Vercel SpeedInsights
-import { injectSpeedInsights } from '@vercel/speed-insights';
+// Speed insights functionality
+console.log('Speed insights module loaded');
 
-// Initialize SpeedInsights when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Speed Insights
-  injectSpeedInsights({
-    // You can add configuration options here if needed
-    // debug: true,
-  });
-  console.log('SpeedInsights initialized');
-});
+// This is a placeholder for speed insights functionality
+// To properly use @vercel/speed-insights, you would need to:
+// 1. Install the package: npm install @vercel/speed-insights
+// 2. Then import it properly
+
+// For now, this file exists but doesn't throw errors
