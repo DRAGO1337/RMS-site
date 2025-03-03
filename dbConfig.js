@@ -9,11 +9,14 @@ if (!process.env.DATABASE_URL) {
 
 // Use connection pooling for better performance
 let connectionString = process.env.DATABASE_URL;
-// Check if URL contains Neon domain and add pooler if needed
-if (connectionString && connectionString.includes('.neon.tech')) {
-  connectionString = connectionString.replace('.neon.tech', '-pooler.neon.tech');
-  console.log('Using Neon connection pooler');
+
+// Don't modify the connection string if it's not properly set
+if (!connectionString) {
+  console.error('DATABASE_URL is not defined or is empty');
+  connectionString = 'postgresql://postgres:postgres@localhost:5432/postgres';
 }
+// Log the connection string (without sensitive parts) for debugging
+console.log('Using database connection:', connectionString.split('@')[1] || 'local');
 
 // Use environment variables from Vercel/Neon
 const pool = new Pool({
