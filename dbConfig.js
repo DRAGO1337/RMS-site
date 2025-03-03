@@ -7,9 +7,17 @@ if (!process.env.DATABASE_URL) {
   console.error('Please set this variable in the Secrets tab with your Neon database connection string');
 }
 
+// Use connection pooling for better performance
+let connectionString = process.env.DATABASE_URL;
+// Check if URL contains Neon domain and add pooler if needed
+if (connectionString && connectionString.includes('.neon.tech')) {
+  connectionString = connectionString.replace('.neon.tech', '-pooler.neon.tech');
+  console.log('Using Neon connection pooler');
+}
+
 // Use environment variables from Vercel/Neon
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: connectionString,
   ssl: {
     rejectUnauthorized: false
   },

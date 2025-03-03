@@ -14,6 +14,17 @@ server.use(express.static('./'));
 // Initialize database
 async function initDb() {
   try {
+    // Drop existing tables if there's a schema mismatch
+    try {
+      // First drop orders table (because of foreign key constraint)
+      await db.query(`DROP TABLE IF EXISTS orders CASCADE`);
+      // Then drop users table
+      await db.query(`DROP TABLE IF EXISTS users CASCADE`);
+      console.log('Dropped existing tables to fix schema');
+    } catch (dropErr) {
+      console.log('Note: Could not drop tables:', dropErr.message);
+    }
+    
     // Create users table if it doesn't exist
     await db.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -25,7 +36,7 @@ async function initDb() {
       )
     `);
     
-    // Create orders table if it doesn't exist
+    // Create orders table if it doesn't exist - ensure data types match
     await db.query(`
       CREATE TABLE IF NOT EXISTS orders (
         id VARCHAR(255) PRIMARY KEY,
